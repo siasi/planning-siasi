@@ -1,42 +1,61 @@
 package model;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Task {
 	private long id;
 	private String name;
-	private LocalTime begin, end;
-	
+	private LocalDate begin, end;
+	private List<Task> tasks;
+
 	public long getId() {
 		return id;
 	}
-	
+
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public LocalTime getBegin() {
+
+	public LocalDate getBegin() {
 		return begin;
 	}
-	
-	public void setBegin(LocalTime begin) {
+
+	public void setBegin(LocalDate begin) {
 		this.begin = begin;
 	}
-	
-	public LocalTime getEnd() {
+
+	public LocalDate getEnd() {
 		return end;
 	}
-	
-	public void setEnd(LocalTime end) {
+
+	public void setEnd(LocalDate end) {
 		this.end = end;
 	}
-	
+
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	public void addTask(Task task) {
+		if (tasks == null) {
+			tasks = new ArrayList<>();
+		}
+		this.tasks.add(task);
+	}
+
+	@Override
+	public String toString() {
+		return "Task [id=" + id + "]";
+	}
+
 }
