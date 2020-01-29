@@ -1,32 +1,47 @@
 package controllers;
 
+import static org.junit.Assert.assertEquals;
+import static play.mvc.Http.Status.BAD_REQUEST;
+import static play.mvc.Http.Status.CREATED;
+import static play.test.Helpers.POST;
+import static play.test.Helpers.route;
+
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import model.Projects;
 import play.Application;
 import play.inject.guice.GuiceApplicationBuilder;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.test.WithApplication;
 
-import static org.junit.Assert.assertEquals;
-import static play.mvc.Http.Status.OK;
-import static play.test.Helpers.GET;
-import static play.test.Helpers.route;
+public class ProjectControllerTest extends WithApplication {
 
-public class HomeControllerTest extends WithApplication {
+	@Override
+	protected Application provideApplication() {
+		return new GuiceApplicationBuilder().build();
+	}
 
-    @Override
-    protected Application provideApplication() {
-        return new GuiceApplicationBuilder().build();
-    }
+	@Test
+	public void shouldCreateASimpleModel() throws JsonProcessingException {
+		ObjectNode projectNode = Projects.aValidProjects();
+		Http.RequestBuilder request = new Http.RequestBuilder().method(POST).bodyJson(projectNode).uri("/project");
 
-    @Test
-    public void testIndex() {
-        Http.RequestBuilder request = new Http.RequestBuilder()
-                .method(GET)
-                .uri("/");
+		Result result = route(app, request);
+		assertEquals(CREATED, result.status());
+	}
 
-        Result result = route(app, request);
-        assertEquals(OK, result.status());
-    }
+	@Test
+	public void shouldRejectAnInvalidModel() throws JsonProcessingException {
+		ObjectNode projectNode = Projects.anInvalidProject();
+
+		Http.RequestBuilder request = new Http.RequestBuilder().method(POST).bodyJson(projectNode).uri("/project");
+
+		Result result = route(app, request);
+		assertEquals(BAD_REQUEST, result.status());
+	}
 
 }
