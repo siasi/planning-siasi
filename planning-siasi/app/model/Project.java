@@ -1,10 +1,25 @@
 package model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Project extends Task {
+
+	public Project(String name, Side begin, Side end) {
+		super(name, begin, end);
+	}
+
+	@JsonCreator
+	public Project(@JsonProperty("id") long id, @JsonProperty("name") String name, @JsonProperty("begin") Side begin,
+			@JsonProperty("end") Side end, @JsonProperty("tasks") List<Task> tasks) {
+		super(id, name, begin, end, tasks);
+	}
 
 	public boolean isValid() {
 
-		if (getTasks() == null || getTasks().isEmpty()) {
+		if (!hasTasks()) {
 			return false;
 		}
 
@@ -12,10 +27,6 @@ public class Project extends Task {
 	}
 
 	private boolean validateTask(Task currentTask, Task parent) {
-		if (currentTask.getBegin() == null || currentTask.getEnd() == null) {
-			return false;
-		}
-
 		if (currentTask.getEnd().isBefore(currentTask.getBegin())) {
 			return false;
 		}
@@ -30,7 +41,7 @@ public class Project extends Task {
 			}
 		}
 
-		if (currentTask.getTasks() != null && !currentTask.getTasks().isEmpty()) {
+		if (currentTask.hasTasks()) {
 			for (Task t : currentTask.getTasks()) {
 				if (!validateTask(t, currentTask)) {
 					return false;
@@ -39,11 +50,6 @@ public class Project extends Task {
 		}
 
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Project [getId()=" + getId() + ", getTasks()=" + getTasks() + "]";
 	}
 
 }

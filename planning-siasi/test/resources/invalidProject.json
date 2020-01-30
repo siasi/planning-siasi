@@ -1,61 +1,151 @@
-{ 
+{
    "id":10,
    "name":"My Project",
-   "begin":"2020-06-12",
-   "end":"2020-06-20",
-   "tasks":[ 
-      { 
+   "begin":{
+      "date":"2020-06-12",
+      "constraints":[
+
+      ]
+   },
+   "end":{
+      "date":"2020-06-20",
+      "constraints":[
+
+      ]
+   },
+   "tasks":[
+      {
          "id":100,
          "name":"First Big Task",
-         "begin":"2020-06-12",
-         "end":"2020-06-20",
-         "tasks":[ 
-            { 
+         "begin":{
+            "date":"2020-06-12",
+            "constraints":[
+
+            ]
+         },
+         "end":{
+            "date":"2020-06-20",
+            "constraints":[
+
+            ]
+         },
+         "tasks":[
+            {
                "id":101,
                "name":"First Big Task - A",
-               "begin":"2020-06-12",
-               "end":"2020-06-15"
+               "begin":{
+                  "date":"2020-06-12",
+                  "constraints":[
+
+                  ]
+               },
+               "end":{
+                  "date":"2020-06-15",
+                  "constraints":[
+
+                  ]
+               }
             },
-            { 
+            {
                "id":102,
                "name":"First Big Task - B",
-               "begin":"2020-06-14",
-               "end":"2020-06-16"
+               "begin":{
+                  "date":"2020-06-14",
+                  "constraints":[
+
+                  ]
+               },
+               "end":{
+                  "date":"2020-06-16",
+                  "constraints":[
+
+                  ]
+               }
             },
-            { 
+            {
                "id":103,
                "name":"First Big Task - C",
-               "begin":"2020-06-16",
-               "end":"2020-06-20"
+               "begin":{
+                  "date":"2020-06-16",
+                  "constraints":[
+
+                  ]
+               },
+               "end":{
+                  "date":"2020-06-20",
+                  "constraints":[
+
+                  ]
+               }
             }
          ]
       },
-      { 
+      {
          "id":200,
          "name":"Second Big Task",
-         "begin":"2020-06-14",
-         "end":"2020-06-18",
-         "tasks":[ 
-            { 
+         "begin":{
+            "date":"2020-06-14",
+            "constraints":[
+
+            ]
+         },
+         "end":{
+            "date":"2020-06-18",
+            "constraints":[
+
+            ]
+         },
+         "tasks":[
+            {
                "id":201,
                "name":"Second Big Task - A",
-               "begin":"2020-06-14",
-               "end":"2020-06-15"
+               "begin":{
+                  "date":"2020-06-14",
+                  "constraints":[
+
+                  ]
+               },
+               "end":{
+                  "date":"2020-06-15",
+                  "constraints":[
+
+                  ]
+               }
             },
-            { 
+            {
                "id":202,
                "name":"Second Big Task - B",
-               "begin":"2020-06-15",
-               "end":"2020-06-20"
+               "begin":{
+                  "date":"2020-06-15",
+                  "constraints":[
+
+                  ]
+               },
+               "end":{
+                  "date":"2020-06-20",
+                  "constraints":[
+
+                  ]
+               }
             }
          ]
       },
-      { 
+      {
          "id":300,
          "name":"Third Big Task",
-         "begin":"2020-06-18",
-         "end":"2020-06-20",
-         "tasks":[ 
+         "end":{
+            "date":"2020-06-18",
+            "constraints":[
+
+            ]
+         },
+         "end":{
+            "date":"2020-06-20",
+            "constraints":[
+
+            ]
+         },
+         "tasks":[
 
          ]
       }
