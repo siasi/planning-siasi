@@ -64,6 +64,16 @@ public class ProjectController extends Controller {
 		}, context.current());
 	}
 
+	public CompletionStage<Result> retrieve(long id) {
+		return supplyAsync(() -> {
+			final Optional<Project> studentOptional = projectStore.getProject(id);
+			return studentOptional.map(project -> {
+				JsonNode jsonObjects = Json.toJson(project);
+				return ok(createResponse(jsonObjects, true));
+			}).orElse(notFound(createResponse("Project with id:" + id + " not found", false)));
+		}, context.current());
+	}
+
 	public static ObjectNode createResponse(Object response, boolean ok) {
 		ObjectNode result = Json.newObject();
 		result.put("isSuccessful", ok);

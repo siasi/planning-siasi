@@ -3,13 +3,17 @@ package controllers;
 import static org.junit.Assert.assertEquals;
 import static play.mvc.Http.Status.BAD_REQUEST;
 import static play.mvc.Http.Status.CREATED;
+import static play.mvc.Http.Status.OK;
+import static play.test.Helpers.GET;
 import static play.test.Helpers.POST;
 import static play.test.Helpers.route;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -22,6 +26,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.test.WithApplication;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ProjectControllerTest extends WithApplication {
 
 	@Override
@@ -30,7 +35,7 @@ public class ProjectControllerTest extends WithApplication {
 	}
 
 	@Test
-	public void shouldCreateASimpleModel() throws IOException {
+	public void a_shouldCreateASimpleModel() throws IOException {
 		// ObjectNode projectNode = Projects.aValidProjects();
 		JsonNode projectNode = parseJson("test/resources/simpleProject.json");
 
@@ -49,6 +54,24 @@ public class ProjectControllerTest extends WithApplication {
 
 		Result result = route(app, request);
 		assertEquals(BAD_REQUEST, result.status());
+	}
+
+	@Test
+	public void b_shouldRetrieveAnExistingModel() throws IOException {
+		// ObjectNode projectNode = Projects.aValidProjects();
+		JsonNode projectNode = parseJson("test/resources/simpleProject.json");
+
+		Http.RequestBuilder createRequest = new Http.RequestBuilder().method(POST).bodyJson(projectNode)
+				.uri("/project");
+
+		Result createResult = route(app, createRequest);
+		assertEquals(CREATED, createResult.status());
+
+		Http.RequestBuilder retrieveRequest = new Http.RequestBuilder().method(GET).uri("/project/0");
+
+		Result retrieveResult = route(app, retrieveRequest);
+		assertEquals(OK, retrieveResult.status());
+
 	}
 
 	private JsonNode parseJson(String fileName) throws IOException, JsonProcessingException {

@@ -7,23 +7,23 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Side {
+public class TaskSide {
 	private LocalDate date;
-	private List<Constraint> constraints = new ArrayList<>();
+	private List<ConstraintSide> constraints = new ArrayList<>();
 
-	public Side(LocalDate date) {
+	public TaskSide(LocalDate date) {
 		super();
 		this.date = date;
 	}
 
 	@JsonCreator
-	public Side(@JsonProperty("date") LocalDate date, @JsonProperty("constraints") List<Constraint> constraints) {
+	public TaskSide(@JsonProperty("date") LocalDate date, @JsonProperty("constraints") List<ConstraintSide> constraints) {
 		super();
 		this.date = date;
 		this.constraints = constraints;
 	}
 
-	public void addConstraints(Constraint c) {
+	public void addConstraints(ConstraintSide c) {
 		this.constraints.add(c);
 	}
 
@@ -31,16 +31,20 @@ public class Side {
 		return date;
 	}
 
-	public boolean isBefore(Side other) {
+	public boolean isBefore(TaskSide other) {
 		return date.isBefore(other.date);
 	}
 
-	public boolean isAfter(Side other) {
+	public boolean isAfter(TaskSide other) {
 		return date.isAfter(other.date);
 	}
 
 	public boolean hasConstraints() {
 		return constraints != null && !constraints.isEmpty();
+	}
+
+	public List<ConstraintSide> getConstraints() {
+		return constraints;
 	}
 
 	@Override

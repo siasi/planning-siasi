@@ -5,16 +5,17 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ProjectStore {
-	private Map<Integer, Project> projects = new HashMap<>();
+	private Map<Long, Project> projects = new HashMap<>();
 
 	public Optional<Project> addProject(Project project) {
-		int id = projects.size();
+		long id = projects.size();
 		project.setId(id);
 		projects.put(id, project);
 		return Optional.ofNullable(project);
 	}
 
-	public Optional<Project> getProject(int id) {
+	public Optional<Project> getProject(long id) {
 		return Optional.ofNullable(projects.get(id));
 	}
+
 }

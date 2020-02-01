@@ -1,21 +1,24 @@
 package model;
 
+import java.time.LocalDate;
+import java.util.Map;
+
 public class Constraint {
+	private ConstraintSide from, to;
 
-	private long taskId;
-	private SideType side;
-
-	public long getTaskId() {
-		return taskId;
+	public Constraint(ConstraintSide from, ConstraintSide to) {
+		super();
+		this.from = from;
+		this.to = to;
 	}
 
-	public SideType getSide() {
-		return side;
-	}
+	public boolean isValid(Map<Long, Task> taskIdToTask) {
+		Task taskFrom = taskIdToTask.get(from.getTaskId());
+		Task taskTo = taskIdToTask.get(to.getTaskId());
 
-	@Override
-	public String toString() {
-		return "Constraint [taskId=" + taskId + ", side=" + side + "]";
+		LocalDate fromDate = taskFrom.getDate(from.getSide());
+		LocalDate toDate = taskTo.getDate(to.getSide());
+		return fromDate.isBefore(toDate);
 	}
 
 }

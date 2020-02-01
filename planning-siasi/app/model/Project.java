@@ -1,19 +1,26 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Project extends Task {
 
-	public Project(String name, Side begin, Side end) {
+	private Map<Long, Task> taskIdToTask = new HashMap<>();
+	private List<Constraint> constraints = new ArrayList<>();
+
+	public Project(String name, TaskSide begin, TaskSide end) {
 		super(name, begin, end);
 	}
 
 	@JsonCreator
-	public Project(@JsonProperty("id") long id, @JsonProperty("name") String name, @JsonProperty("begin") Side begin,
-			@JsonProperty("end") Side end, @JsonProperty("tasks") List<Task> tasks) {
+	public Project(@JsonProperty("id") long id, @JsonProperty("name") String name,
+			@JsonProperty("begin") TaskSide begin, @JsonProperty("end") TaskSide end,
+			@JsonProperty("tasks") List<Task> tasks) {
 		super(id, name, begin, end, tasks);
 	}
 
@@ -23,10 +30,29 @@ public class Project extends Task {
 			return false;
 		}
 
-		return validateTask(this, null);
+		// Validate the task dates and fill the cache as side effect
+		if (!validateTaskDuration(this, null)) {
+			return false;
+		}
+
+		// Validate the constraints
+		return validateConstraints();
 	}
 
-	private boolean validateTask(Task currentTask, Task parent) {
+	private boolean validateConstraints() {
+		for (Constraint c : constraints) {
+			if (!c.isValid(taskIdToTask)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean validateTaskDuration(Task currentTask, Task parent) {
+
+		if (parent != null) {
+			taskIdToTask.put(currentTask.getId(), currentTask);
+		}
 		if (currentTask.getEnd().isBefore(currentTask.getBegin())) {
 			return false;
 		}
@@ -41,15 +67,23 @@ public class Project extends Task {
 			}
 		}
 
+		buildConstraints(currentTask, currentTask.getBegin(), SideType.BEGIN);
+		buildConstraints(currentTask, currentTask.getEnd(), SideType.END);
+
 		if (currentTask.hasTasks()) {
 			for (Task t : currentTask.getTasks()) {
-				if (!validateTask(t, currentTask)) {
+				if (!validateTaskDuration(t, currentTask)) {
 					return false;
 				}
 			}
 		}
 
 		return true;
+	}
+
+	private void buildConstraints(Task currentTask, TaskSide side, SideType sideType) {
+		side.getConstraints()
+				.forEach(c -> constraints.add(new Constraint(new ConstraintSide(currentTask.getId(), sideType), c)));
 	}
 
 }

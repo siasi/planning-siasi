@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +10,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Task {
 	private long id;
 	private String name;
-	private Side begin, end;
+	private TaskSide begin, end;
 	private List<Task> tasks = new ArrayList<>();
 
-	public Task(String name, Side begin, Side end) {
+	public Task(String name, TaskSide begin, TaskSide end) {
 		super();
 
 		if (begin == null) {
@@ -33,8 +34,8 @@ public class Task {
 	}
 
 	@JsonCreator
-	public Task(@JsonProperty("id") long id, @JsonProperty("name") String name, @JsonProperty("begin") Side begin,
-			@JsonProperty("end") Side end, @JsonProperty("tasks") List<Task> tasks) {
+	public Task(@JsonProperty("id") long id, @JsonProperty("name") String name, @JsonProperty("begin") TaskSide begin,
+			@JsonProperty("end") TaskSide end, @JsonProperty("tasks") List<Task> tasks) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -55,11 +56,11 @@ public class Task {
 		return name;
 	}
 
-	public Side getBegin() {
+	public TaskSide getBegin() {
 		return begin;
 	}
 
-	public Side getEnd() {
+	public TaskSide getEnd() {
 		return end;
 	}
 
@@ -73,6 +74,13 @@ public class Task {
 
 	public boolean hasTasks() {
 		return tasks != null && !tasks.isEmpty();
+	}
+
+	public LocalDate getDate(SideType side) {
+		if (SideType.BEGIN.equals(side)) {
+			return begin.getDate();
+		}
+		return end.getDate();
 	}
 
 	@Override

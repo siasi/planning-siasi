@@ -17,16 +17,16 @@ public class ProjectTest {
 
 	@Test
 	public void emptyProjectShouldNotBeValid() {
-		Project project = new Project("", new Side(LocalDate.parse("2020-01-01")),
-				new Side(LocalDate.parse("2020-01-01")));
+		Project project = new Project("", new TaskSide(LocalDate.parse("2020-01-01")),
+				new TaskSide(LocalDate.parse("2020-01-01")));
 		Assert.assertFalse(project.isValid());
 	}
 
 	@Test
 	public void projectWithOneTaskAndDateSet_shouldBeValid() {
-		Project project = new Project("", new Side(LocalDate.parse("2020-06-12")),
-				new Side(LocalDate.parse("2020-06-20")));
-		Task task = new Task("", new Side(LocalDate.parse("2020-06-12")), new Side(LocalDate.parse("2020-06-20")));
+		Project project = new Project("", new TaskSide(LocalDate.parse("2020-06-12")),
+				new TaskSide(LocalDate.parse("2020-06-20")));
+		Task task = new Task("", new TaskSide(LocalDate.parse("2020-06-12")), new TaskSide(LocalDate.parse("2020-06-20")));
 		project.addTask(task);
 
 		Assert.assertTrue(project.isValid());
@@ -45,8 +45,8 @@ public class ProjectTest {
 	public void shouldParseAConstraint() throws JsonMappingException, JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
-		Constraint side = objectMapper.readValue("{ \n" + "					\"taskId\" : 102, \n"
-				+ "					\"side\" : \"END\"\n" + "				}", Constraint.class);
+		ConstraintSide side = objectMapper.readValue("{ \n" + "					\"taskId\" : 102, \n"
+				+ "					\"side\" : \"END\"\n" + "				}", ConstraintSide.class);
 		Assert.assertEquals(102, side.getTaskId());
 		Assert.assertEquals(SideType.END, side.getSide());
 
@@ -56,8 +56,8 @@ public class ProjectTest {
 	public void shouldParseASide() throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
-		Side side = objectMapper.readValue(
-				"{\n" + "      \"date\":\"2020-06-20\",\n" + "      \"constraints\":[]\n" + "   }", Side.class);
+		TaskSide side = objectMapper.readValue(
+				"{\n" + "      \"date\":\"2020-06-20\",\n" + "      \"constraints\":[]\n" + "   }", TaskSide.class);
 		Assert.assertNotNull(side.getDate());
 		Assert.assertFalse(side.hasConstraints());
 		Assert.assertEquals(LocalDate.parse("2020-06-20"), side.getDate());
