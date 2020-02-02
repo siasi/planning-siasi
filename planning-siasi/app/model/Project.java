@@ -94,12 +94,31 @@ public class Project extends Task {
 	}
 
 	private Task updateTaskEnd(Task task, LocalDate newDate) {
-		task.getEnd().setDate(newDate);
-		if (task.hasParent() && newDate.isAfter(task.getParent().getEnd().getDate())) {
-			return updateTaskEnd(task.getParent(), newDate);
+		if (newDate.isBefore(task.getEnd().getDate())) {
+			anticipateTaskEnd(task, newDate);
+			for (Task c : task.getTasks()) {
+				if (newDate.isBefore(c.getEnd().getDate())) {
+					anticipateTaskEnd(c, newDate);
+				}
+			}
+			return this;
+		} else if (newDate.isAfter(task.getEnd().getDate())) {
+			task.getEnd().setDate(newDate);
+			if (task.hasParent() && newDate.isAfter(task.getParent().getEnd().getDate())) {
+				return updateTaskEnd(task.getParent(), newDate);
+			}
+			return task;
+		} else {
+			return this;
 		}
+	}
 
-		return task;
+	private void anticipateTaskEnd(Task task, LocalDate newDate) {
+		if (newDate.isBefore(task.getBegin().getDate())) {
+			task.getEnd().setDate(task.getBegin().getDate()); // TODO collapse()
+		} else {
+			task.getEnd().setDate(newDate);
+		}
 	}
 
 	public Task updateTaskBegin(long taskId, LocalDate newDate) {

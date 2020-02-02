@@ -15,17 +15,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class ProjectTest {
 
 	@Test
-	public void projectWithOneTaskAndDateSet_shouldBeValid() {
-		Project project = new Project("", new TaskSide(LocalDate.parse("2020-06-12")),
-				new TaskSide(LocalDate.parse("2020-06-20")));
-		Task task = new Task("", new TaskSide(LocalDate.parse("2020-06-12")),
-				new TaskSide(LocalDate.parse("2020-06-20")));
-		project.addTask(task);
-
-		Assert.assertTrue(project.isValid());
-	}
-
-	@Test
 	public void shouldDetectAValidModel() throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
@@ -55,7 +44,7 @@ public class ProjectTest {
 	}
 
 	@Test
-	public void shouldUpdateTaskEnd_SingleTask() throws JsonParseException, JsonMappingException, IOException {
+	public void shouldPosticipateTaskEnd_SingleTask() throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		File file = new File("test/resources/oneTaskProject.json");
@@ -68,7 +57,7 @@ public class ProjectTest {
 	}
 
 	@Test
-	public void shouldUpdateTaskEnd_NestedTask_ParentModified()
+	public void shouldPosticipateTaskEnd_NestedTask_ParentModified()
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
@@ -83,7 +72,7 @@ public class ProjectTest {
 	}
 
 	@Test
-	public void shouldUpdateTaskEnd_NestedTask_Parent_NOT_Modified()
+	public void shouldPosticipateTaskEnd_NestedTask_Parent_NOT_Modified()
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
@@ -99,7 +88,79 @@ public class ProjectTest {
 	}
 
 	@Test
-	public void shouldAllowTaskBeginUpdate_SingleTask() throws JsonParseException, JsonMappingException, IOException {
+	public void shouldAnticipateTaskEnd_SingleTask_AnticipateAfterTheBegin()
+			throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		File file = new File("test/resources/oneTaskProject.json");
+		Project project = objectMapper.readValue(file, Project.class);
+		Assert.assertTrue(project.isValid());
+
+		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-18"));
+		Assert.assertEquals(LocalDate.parse("2020-06-18"), project.getEnd().getDate());
+		Assert.assertEquals(project, highestModifiedTask);
+	}
+
+	@Test
+	public void shouldAnticipateTaskEnd_SingleTask_AnticipateAtTheBegin()
+			throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		File file = new File("test/resources/oneTaskProject.json");
+		Project project = objectMapper.readValue(file, Project.class);
+		Assert.assertTrue(project.isValid());
+
+		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-12"));
+		Assert.assertEquals(LocalDate.parse("2020-06-12"), project.getEnd().getDate());
+		Assert.assertEquals(project, highestModifiedTask);
+	}
+
+	@Test
+	public void shouldAnticipateTaskEnd_SingleTask_AnticipateBeforeTheBegin()
+			throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		File file = new File("test/resources/oneTaskProject.json");
+		Project project = objectMapper.readValue(file, Project.class);
+		Assert.assertTrue(project.isValid());
+
+		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-11"));
+		Assert.assertEquals(LocalDate.parse("2020-06-12"), project.getEnd().getDate());
+		Assert.assertEquals(project, highestModifiedTask);
+	}
+
+	@Test
+	public void shouldAnticipateTaskEnd_NestedTask_ChildrenModified()
+			throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		File file = new File("test/resources/oneNestedTaskProject.json");
+		Project project = objectMapper.readValue(file, Project.class);
+		Assert.assertTrue(project.isValid());
+
+		Task highestModifiedTask = project.updateTaskEnd(10, LocalDate.parse("2020-06-17"));
+		Assert.assertEquals(LocalDate.parse("2020-06-17"), project.getEnd().getDate());
+		Assert.assertEquals(project, highestModifiedTask);
+		Assert.assertEquals(LocalDate.parse("2020-06-17"), project.getTasks().get(0).getEnd().getDate());
+	}
+
+	@Test
+	public void shouldAnticipateTaskEnd_NestedTask_Children_NOT_Modified()
+			throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		File file = new File("test/resources/oneNestedTaskProject.json");
+		Project project = objectMapper.readValue(file, Project.class);
+		Assert.assertTrue(project.isValid());
+
+		Task highestModifiedTask = project.updateTaskEnd(10, LocalDate.parse("2020-06-19"));
+		Assert.assertEquals(LocalDate.parse("2020-06-19"), project.getEnd().getDate());
+		Assert.assertEquals(project, highestModifiedTask);
+		Assert.assertEquals(LocalDate.parse("2020-06-18"), project.getTasks().get(0).getEnd().getDate());
+	}
+
+	@Test
+	public void shouldAnticipateTaskBegin_SingleTask() throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		File file = new File("test/resources/oneTaskProject.json");
@@ -112,7 +173,7 @@ public class ProjectTest {
 	}
 
 	@Test
-	public void shouldUpdateTaskBegin_NestedTask_ParentModified()
+	public void shouldAnticipateTaskBegin_NestedTask_ParentModified()
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
@@ -127,7 +188,7 @@ public class ProjectTest {
 	}
 
 	@Test
-	public void shouldUpdateTaskBegin_NestedTask_Parent_NOT_Modified()
+	public void shouldAnticipateTaskBegin_NestedTask_Parent_NOT_Modified()
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
