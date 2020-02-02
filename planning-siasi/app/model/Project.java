@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,9 +27,9 @@ public class Project extends Task {
 
 	public boolean isValid() {
 
-		if (!hasTasks()) {
-			return false;
-		}
+		// if (!hasTasks()) {
+		// return false;
+		// }
 
 		// Validate the task dates and fill the cache as side effect
 		if (!validateTaskDuration(this, null)) {
@@ -84,6 +85,11 @@ public class Project extends Task {
 	private void buildConstraints(Task currentTask, TaskSide side, SideType sideType) {
 		side.getConstraints()
 				.forEach(c -> constraints.add(new Constraint(new ConstraintSide(currentTask.getId(), sideType), c)));
+	}
+
+	public Task updateTaskEnd(long taskId, LocalDate newDate) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -3,9 +3,11 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.ProjectController.index
-POST    /project                    controllers.ProjectController.create(request: Request)
-GET     /project/:id                controllers.ProjectController.retrieve(id:Long)
+GET     /                           				controllers.ProjectController.index
+POST    /project                    				controllers.ProjectController.create(request: Request)
+GET     /project/:id                				controllers.ProjectController.retrieve(id:Long)
+PUT     /project/:id/task/:taskId/begin/:newDate 	controllers.ProjectController.updateTaskBegin(id:Long, taskId:Long, newDate:String)
+PUT     /project/:id/task/:taskId/end/:newDate 	controllers.ProjectController.updateTaskEnd(id:Long, taskId:Long, newDate:String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

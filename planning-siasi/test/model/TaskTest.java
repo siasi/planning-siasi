@@ -38,6 +38,7 @@ public class TaskTest {
 	public void whenTheNestedTaskBeginBefore_shouldNotBeAValidTask() {
 		Project project = new Project("project", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-20")));
 		Task task = new Task("task", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-19")));
+		project.addTask(task);
 
 		Task nestedTask = new Task("task", new TaskSide(LocalDate.parse("2020-06-11")),
 				new TaskSide(LocalDate.parse("2020-06-20")));
@@ -50,6 +51,8 @@ public class TaskTest {
 	public void whenTheNestedTaskCompleteAfter_shouldNotBeAValidTask() {
 		Project project = new Project("project", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-20")));
 		Task task = new Task("task", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-21")));
+		project.addTask(task);
+
 		Task nestedTask = new Task("task", new TaskSide(LocalDate.parse("2020-06-12")),
 				new TaskSide(LocalDate.parse("2020-06-22")));
 		task.addTask(nestedTask);
@@ -61,6 +64,7 @@ public class TaskTest {
 	public void whenOneNestedTaskBeginAfter_shouldNotBeAValidTask() {
 		Project project = new Project("project", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-20")));
 		Task task = new Task("task", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-21")));
+		project.addTask(task);
 
 		Task nestedTaskA = new Task("task", new TaskSide(LocalDate.parse("2020-06-12")),
 				new TaskSide(LocalDate.parse("2020-06-14")));

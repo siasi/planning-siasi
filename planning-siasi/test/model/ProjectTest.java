@@ -16,17 +16,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class ProjectTest {
 
 	@Test
-	public void emptyProjectShouldNotBeValid() {
-		Project project = new Project("", new TaskSide(LocalDate.parse("2020-01-01")),
-				new TaskSide(LocalDate.parse("2020-01-01")));
-		Assert.assertFalse(project.isValid());
-	}
-
-	@Test
 	public void projectWithOneTaskAndDateSet_shouldBeValid() {
 		Project project = new Project("", new TaskSide(LocalDate.parse("2020-06-12")),
 				new TaskSide(LocalDate.parse("2020-06-20")));
-		Task task = new Task("", new TaskSide(LocalDate.parse("2020-06-12")), new TaskSide(LocalDate.parse("2020-06-20")));
+		Task task = new Task("", new TaskSide(LocalDate.parse("2020-06-12")),
+				new TaskSide(LocalDate.parse("2020-06-20")));
 		project.addTask(task);
 
 		Assert.assertTrue(project.isValid());

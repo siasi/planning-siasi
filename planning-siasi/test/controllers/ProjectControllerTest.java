@@ -6,6 +6,7 @@ import static play.mvc.Http.Status.CREATED;
 import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.GET;
 import static play.test.Helpers.POST;
+import static play.test.Helpers.PUT;
 import static play.test.Helpers.route;
 
 import java.io.File;
@@ -73,6 +74,28 @@ public class ProjectControllerTest extends WithApplication {
 		assertEquals(OK, retrieveResult.status());
 
 	}
+
+	@Test
+	public void allowTaskEndUpdate() throws IOException {
+		// ObjectNode projectNode = Projects.aValidProjects();
+		JsonNode projectNode = parseJson("test/resources/oneTaskProject.json");
+
+		Http.RequestBuilder createRequest = new Http.RequestBuilder().method(POST).bodyJson(projectNode)
+				.uri("/project");
+
+		Result createResult = route(app, createRequest);
+		assertEquals(CREATED, createResult.status());
+
+		Http.RequestBuilder retrieveRequest = new Http.RequestBuilder().method(PUT)
+				.uri("/project/0/task/10/end/2020-01-22");
+
+		Result retrieveResult = route(app, retrieveRequest);
+		assertEquals(OK, retrieveResult.status());
+
+	}
+
+	// TODO allow task begin update
+	//
 
 	private JsonNode parseJson(String fileName) throws IOException, JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
