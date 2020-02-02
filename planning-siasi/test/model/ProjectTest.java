@@ -122,4 +122,30 @@ public class ProjectTest {
 		Assert.assertFalse(project.isValid());
 	}
 
+	@Test
+	public void shouldAllowTaskEndUpdate_SingleTask() throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		File file = new File("test/resources/oneTaskProject.json");
+		Project project = objectMapper.readValue(file, Project.class);
+		Assert.assertTrue(project.isValid());
+
+		Task highestModifiedTask = project.updateTaskEnd(10, LocalDate.parse("2020-06-21"));
+		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getEnd().getDate());
+		Assert.assertEquals(project, highestModifiedTask);
+	}
+
+	@Test
+	public void shouldAllowTaskEndUpdate_NestedTask() throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		File file = new File("test/resources/oneNestedTaskProject.json");
+		Project project = objectMapper.readValue(file, Project.class);
+		Assert.assertTrue(project.isValid());
+
+		Task highestModifiedTask = project.updateTaskEnd(100, LocalDate.parse("2020-06-21"));
+		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getTasks().get(0).getEnd().getDate());
+		Assert.assertEquals(project, highestModifiedTask);
+	}
+
 }

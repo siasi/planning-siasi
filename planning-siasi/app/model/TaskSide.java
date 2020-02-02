@@ -17,7 +17,8 @@ public class TaskSide {
 	}
 
 	@JsonCreator
-	public TaskSide(@JsonProperty("date") LocalDate date, @JsonProperty("constraints") List<ConstraintSide> constraints) {
+	public TaskSide(@JsonProperty("date") LocalDate date,
+			@JsonProperty("constraints") List<ConstraintSide> constraints) {
 		super();
 		this.date = date;
 		this.constraints = constraints;
@@ -45,6 +46,10 @@ public class TaskSide {
 
 	public List<ConstraintSide> getConstraints() {
 		return constraints;
+	}
+
+	void setDate(LocalDate newEnd) {
+		this.date = newEnd;
 	}
 
 	@Override

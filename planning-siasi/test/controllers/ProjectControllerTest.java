@@ -37,18 +37,15 @@ public class ProjectControllerTest extends WithApplication {
 
 	@Test
 	public void a_shouldCreateASimpleModel() throws IOException {
-		// ObjectNode projectNode = Projects.aValidProjects();
 		JsonNode projectNode = parseJson("test/resources/simpleProject.json");
 
 		Http.RequestBuilder request = new Http.RequestBuilder().method(POST).bodyJson(projectNode).uri("/project");
-
 		Result result = route(app, request);
 		assertEquals(CREATED, result.status());
 	}
 
 	@Test
 	public void shouldRejectAnInvalidModel() throws IOException {
-		// ObjectNode projectNode = Projects.anInvalidProject();
 		JsonNode projectNode = parseJson("test/resources/invalidProject.json");
 
 		Http.RequestBuilder request = new Http.RequestBuilder().method(POST).bodyJson(projectNode).uri("/project");
@@ -76,7 +73,7 @@ public class ProjectControllerTest extends WithApplication {
 	}
 
 	@Test
-	public void allowTaskEndUpdate() throws IOException {
+	public void shouldAllowTaskEndUpdate() throws IOException {
 		// ObjectNode projectNode = Projects.aValidProjects();
 		JsonNode projectNode = parseJson("test/resources/oneTaskProject.json");
 
@@ -101,8 +98,7 @@ public class ProjectControllerTest extends WithApplication {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		File file = new File(fileName);
-		JsonNode projectNode = objectMapper.readTree(file);
-		return projectNode;
+		return objectMapper.readTree(file);
 	}
 
 }

@@ -38,6 +38,7 @@ public class Project extends Task {
 
 		// Validate the constraints
 		return validateConstraints();
+		// return true;
 	}
 
 	private boolean validateConstraints() {
@@ -51,6 +52,7 @@ public class Project extends Task {
 
 	private boolean validateTaskDuration(Task currentTask, Task parent) {
 
+		currentTask.setParent(parent);
 		if (parent != null) {
 			taskIdToTask.put(currentTask.getId(), currentTask);
 		}
@@ -88,8 +90,17 @@ public class Project extends Task {
 	}
 
 	public Task updateTaskEnd(long taskId, LocalDate newDate) {
-		// TODO Auto-generated method stub
-		return null;
+		Task task = taskIdToTask.get(taskId);
+		// LocalDate currentDate = task.getEnd().getDate();
+		return ensureParentEndIsConsistent(task, newDate);
+	}
+
+	private Task ensureParentEndIsConsistent(Task task, LocalDate newDate) {
+		task.getEnd().setDate(newDate);
+		if (task.hasParent()) {
+			return ensureParentEndIsConsistent(task.getParent(), newDate);
+		}
+		return this;
 	}
 
 }

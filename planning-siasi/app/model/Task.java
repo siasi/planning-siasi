@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Task {
@@ -12,6 +13,9 @@ public class Task {
 	private String name;
 	private TaskSide begin, end;
 	private List<Task> tasks = new ArrayList<>();
+
+	@JsonIgnore
+	private Task parent;
 
 	public Task(String name, TaskSide begin, TaskSide end) {
 		super();
@@ -81,6 +85,22 @@ public class Task {
 			return begin.getDate();
 		}
 		return end.getDate();
+	}
+
+	void setEnd(LocalDate newEnd) {
+		this.end.setDate(newEnd);
+	};
+
+	public Task getParent() {
+		return this.parent;
+	}
+
+	public void setParent(Task parent) {
+		this.parent = parent;
+	}
+
+	public boolean hasParent() {
+		return parent != null;
 	}
 
 	@Override
