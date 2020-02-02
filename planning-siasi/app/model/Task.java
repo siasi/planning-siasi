@@ -91,10 +91,6 @@ public class Task {
 		return end.getDate();
 	}
 
-	void setEnd(LocalDate newEnd) {
-		this.end.setDate(newEnd);
-	};
-
 	public Task getParent() {
 		return this.parent;
 	}
@@ -107,23 +103,23 @@ public class Task {
 		return parent != null;
 	}
 
-	public Task updateEnd(LocalDate newEnd) {
-		return updateEnd(this, newEnd);
+	public Task setEnd(LocalDate newEnd) {
+		return setEnd(this, newEnd);
 	}
 
-	private Task updateEnd(Task task, LocalDate newEnd) {
+	private Task setEnd(Task task, LocalDate newEnd) {
 		if (newEnd.isBefore(task.getEnd().getDate())) {
 			anticipateEnd(task, newEnd);
 			for (Task c : task.getTasks()) {
 				if (newEnd.isBefore(c.getEnd().getDate())) {
-					updateEnd(c, newEnd);
+					setEnd(c, newEnd);
 				}
 			}
 			return this;
 		} else if (newEnd.isAfter(task.getEnd().getDate())) {
 			task.getEnd().setDate(newEnd);
 			if (task.hasParent() && newEnd.isAfter(task.getParent().getEnd().getDate())) {
-				return updateEnd(task.getParent(), newEnd);
+				return setEnd(task.getParent(), newEnd);
 			}
 			return task;
 		} else {
@@ -138,22 +134,22 @@ public class Task {
 		}
 	}
 
-	public Task updateBegin(LocalDate newBegin) {
-		return updateBegin(this, newBegin);
+	public Task setBegin(LocalDate newBegin) {
+		return setBegin(this, newBegin);
 	}
 
-	private Task updateBegin(Task task, LocalDate newDate) {
+	private Task setBegin(Task task, LocalDate newDate) {
 		if (newDate.isBefore(task.getBegin().getDate())) {
 			task.getBegin().setDate(newDate);
 			if (task.hasParent() && newDate.isBefore(task.getParent().getBegin().getDate())) {
-				return updateBegin(task.getParent(), newDate);
+				return setBegin(task.getParent(), newDate);
 			}
 			return task;
 		} else if (newDate.isAfter(task.getBegin().getDate())) {
 			posticipateBegin(task, newDate);
 			for (Task c : task.getTasks()) {
 				if (newDate.isAfter(c.getBegin().getDate())) {
-					updateBegin(c, newDate);
+					setBegin(c, newDate);
 				}
 			}
 			return this;
@@ -167,6 +163,18 @@ public class Task {
 		if (newDate.isAfter(task.getEnd().getDate())) {
 			task.getEnd().setDate(newDate);
 		}
+	}
+
+	public boolean endsBefore(TaskSide otherSide) {
+		return getEnd().isBefore(otherSide);
+	}
+
+	public boolean beginsBefore(TaskSide otherSide) {
+		return getBegin().isBefore(otherSide);
+	}
+
+	public boolean endsAfter(Task other) {
+		return getEnd().isAfter(other.getEnd());
 	}
 
 	@Override

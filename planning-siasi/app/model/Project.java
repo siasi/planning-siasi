@@ -48,19 +48,21 @@ public class Project extends Task {
 	private boolean validateTaskDuration(Task currentTask, Task parent) {
 
 		currentTask.setParent(parent);
+
 		if (parent != null) {
 			taskIdToTask.put(currentTask.getId(), currentTask);
 		}
-		if (currentTask.getEnd().isBefore(currentTask.getBegin())) {
+
+		if (currentTask.endsBefore(currentTask.getBegin())) {
 			return false;
 		}
 
 		if (parent != null) {
-			if (currentTask.getBegin().isBefore(parent.getBegin())) {
+			if (currentTask.beginsBefore(parent.getBegin())) {
 				return false;
 			}
 
-			if (currentTask.getEnd().isAfter(parent.getEnd())) {
+			if (currentTask.endsAfter(parent)) {
 				return false;
 			}
 		}
@@ -68,11 +70,9 @@ public class Project extends Task {
 		buildConstraints(currentTask, currentTask.getBegin(), SideType.BEGIN);
 		buildConstraints(currentTask, currentTask.getEnd(), SideType.END);
 
-		if (currentTask.hasTasks()) {
-			for (Task t : currentTask.getTasks()) {
-				if (!validateTaskDuration(t, currentTask)) {
-					return false;
-				}
+		for (Task t : currentTask.getTasks()) {
+			if (!validateTaskDuration(t, currentTask)) {
+				return false;
 			}
 		}
 
@@ -85,11 +85,11 @@ public class Project extends Task {
 	}
 
 	public Task updateTaskEnd(long taskId, LocalDate newEnd) {
-		return getTask(taskId).updateEnd(newEnd);
+		return getTask(taskId).setEnd(newEnd);
 	}
 
 	public Task updateTaskBegin(long taskId, LocalDate newBegin) {
-		return getTask(taskId).updateBegin(newBegin);
+		return getTask(taskId).setBegin(newBegin);
 	}
 
 	private Task getTask(long taskId) {
