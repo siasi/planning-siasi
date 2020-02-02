@@ -45,7 +45,11 @@ public class Task {
 		this.name = name;
 		this.begin = begin;
 		this.end = end;
-		this.tasks = tasks;
+		if (tasks == null) {
+			tasks = new ArrayList<>();
+		} else {
+			this.tasks = tasks;
+		}
 	}
 
 	void setId(long id) {
@@ -101,6 +105,68 @@ public class Task {
 
 	public boolean hasParent() {
 		return parent != null;
+	}
+
+	public Task updateEnd(LocalDate newEnd) {
+		return updateEnd(this, newEnd);
+	}
+
+	private Task updateEnd(Task task, LocalDate newEnd) {
+		if (newEnd.isBefore(task.getEnd().getDate())) {
+			anticipateEnd(task, newEnd);
+			for (Task c : task.getTasks()) {
+				if (newEnd.isBefore(c.getEnd().getDate())) {
+					updateEnd(c, newEnd);
+				}
+			}
+			return this;
+		} else if (newEnd.isAfter(task.getEnd().getDate())) {
+			task.getEnd().setDate(newEnd);
+			if (task.hasParent() && newEnd.isAfter(task.getParent().getEnd().getDate())) {
+				return updateEnd(task.getParent(), newEnd);
+			}
+			return task;
+		} else {
+			return this;
+		}
+	}
+
+	private void anticipateEnd(Task task, LocalDate newDate) {
+		task.getEnd().setDate(newDate);
+		if (newDate.isBefore(task.getBegin().getDate())) {
+			task.getBegin().setDate(newDate);
+		}
+	}
+
+	public Task updateBegin(LocalDate newBegin) {
+		return updateBegin(this, newBegin);
+	}
+
+	private Task updateBegin(Task task, LocalDate newDate) {
+		if (newDate.isBefore(task.getBegin().getDate())) {
+			task.getBegin().setDate(newDate);
+			if (task.hasParent() && newDate.isBefore(task.getParent().getBegin().getDate())) {
+				return updateBegin(task.getParent(), newDate);
+			}
+			return task;
+		} else if (newDate.isAfter(task.getBegin().getDate())) {
+			posticipateBegin(task, newDate);
+			for (Task c : task.getTasks()) {
+				if (newDate.isAfter(c.getBegin().getDate())) {
+					updateBegin(c, newDate);
+				}
+			}
+			return this;
+		} else {
+			return this;
+		}
+	}
+
+	private void posticipateBegin(Task task, LocalDate newDate) {
+		task.getBegin().setDate(newDate);
+		if (newDate.isAfter(task.getEnd().getDate())) {
+			task.getEnd().setDate(newDate);
+		}
 	}
 
 	@Override

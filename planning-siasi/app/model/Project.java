@@ -84,68 +84,12 @@ public class Project extends Task {
 				.forEach(c -> constraints.add(new Constraint(new ConstraintSide(currentTask.getId(), sideType), c)));
 	}
 
-	public Task updateTaskEnd(long taskId, LocalDate newDate) {
-		return updateTaskEnd(getTask(taskId), newDate);
+	public Task updateTaskEnd(long taskId, LocalDate newEnd) {
+		return getTask(taskId).updateEnd(newEnd);
 	}
 
-	private Task updateTaskEnd(Task task, LocalDate newDate) {
-		if (newDate.isBefore(task.getEnd().getDate())) {
-			anticipateTaskEnd(task, newDate);
-			for (Task c : task.getTasks()) {
-				if (newDate.isBefore(c.getEnd().getDate())) {
-					anticipateTaskEnd(c, newDate);
-				}
-			}
-			return this;
-		} else if (newDate.isAfter(task.getEnd().getDate())) {
-			task.getEnd().setDate(newDate);
-			if (task.hasParent() && newDate.isAfter(task.getParent().getEnd().getDate())) {
-				return updateTaskEnd(task.getParent(), newDate);
-			}
-			return task;
-		} else {
-			return this;
-		}
-	}
-
-	private void anticipateTaskEnd(Task task, LocalDate newDate) {
-		task.getEnd().setDate(newDate);
-		if (newDate.isBefore(task.getBegin().getDate())) {
-			task.getBegin().setDate(newDate);
-		}
-	}
-
-	public Task updateTaskBegin(long taskId, LocalDate newDate) {
-		Task task = getTask(taskId);
-		if (newDate.isBefore(task.getBegin().getDate())) {
-			return updateTaskBegin(task, newDate);
-		} else if (newDate.isAfter(getBegin().getDate())) {
-			posticipateTaskBegin(task, newDate);
-			for (Task c : task.getTasks()) {
-				if (newDate.isAfter(c.getBegin().getDate())) {
-					posticipateTaskBegin(c, newDate);
-				}
-			}
-			return this;
-		} else {
-			return this;
-		}
-	}
-
-	private void posticipateTaskBegin(Task task, LocalDate newDate) {
-		task.getBegin().setDate(newDate);
-		if (newDate.isAfter(task.getEnd().getDate())) {
-			task.getEnd().setDate(newDate);
-		}
-	}
-
-	private Task updateTaskBegin(Task task, LocalDate newDate) {
-		task.getBegin().setDate(newDate);
-		if (task.hasParent() && newDate.isBefore(task.getParent().getBegin().getDate())) {
-			return updateTaskBegin(task.getParent(), newDate);
-		}
-
-		return task;
+	public Task updateTaskBegin(long taskId, LocalDate newBegin) {
+		return getTask(taskId).updateBegin(newBegin);
 	}
 
 	private Task getTask(long taskId) {
