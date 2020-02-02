@@ -84,7 +84,7 @@ public class ProjectControllerTest extends WithApplication {
 		assertEquals(CREATED, createResult.status());
 
 		Http.RequestBuilder retrieveRequest = new Http.RequestBuilder().method(PUT)
-				.uri("/project/0/task/10/end/2020-01-22");
+				.uri("/project/0/task/0/end/2020-01-22");
 
 		Result retrieveResult = route(app, retrieveRequest);
 		assertEquals(OK, retrieveResult.status());

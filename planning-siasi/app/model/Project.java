@@ -90,17 +90,39 @@ public class Project extends Task {
 	}
 
 	public Task updateTaskEnd(long taskId, LocalDate newDate) {
-		Task task = taskIdToTask.get(taskId);
-		// LocalDate currentDate = task.getEnd().getDate();
-		return ensureParentEndIsConsistent(task, newDate);
+		return updateTaskEnd(getTask(taskId), newDate);
 	}
 
-	private Task ensureParentEndIsConsistent(Task task, LocalDate newDate) {
+	private Task updateTaskEnd(Task task, LocalDate newDate) {
 		task.getEnd().setDate(newDate);
-		if (task.hasParent()) {
-			return ensureParentEndIsConsistent(task.getParent(), newDate);
+		if (task.hasParent() && newDate.isAfter(task.getParent().getEnd().getDate())) {
+			return updateTaskEnd(task.getParent(), newDate);
 		}
-		return this;
+
+		return task;
+	}
+
+	public Task updateTaskBegin(long taskId, LocalDate newDate) {
+		return updateTaskBegin(getTask(taskId), newDate);
+	}
+
+	private Task updateTaskBegin(Task task, LocalDate newDate) {
+		task.getBegin().setDate(newDate);
+		if (task.hasParent() && newDate.isBefore(task.getParent().getBegin().getDate())) {
+			return updateTaskBegin(task.getParent(), newDate);
+		}
+
+		return task;
+	}
+
+	private Task getTask(long taskId) {
+		Task task;
+		if (taskId == getId()) {
+			task = this;
+		} else {
+			task = taskIdToTask.get(taskId);
+		}
+		return task;
 	}
 
 }
