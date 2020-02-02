@@ -27,10 +27,6 @@ public class Project extends Task {
 
 	public boolean isValid() {
 
-		// if (!hasTasks()) {
-		// return false;
-		// }
-
 		// Validate the task dates and fill the cache as side effect
 		if (!validateTaskDuration(this, null)) {
 			return false;
@@ -38,7 +34,6 @@ public class Project extends Task {
 
 		// Validate the constraints
 		return validateConstraints();
-		// return true;
 	}
 
 	private boolean validateConstraints() {
@@ -114,15 +109,34 @@ public class Project extends Task {
 	}
 
 	private void anticipateTaskEnd(Task task, LocalDate newDate) {
+		task.getEnd().setDate(newDate);
 		if (newDate.isBefore(task.getBegin().getDate())) {
-			task.getEnd().setDate(task.getBegin().getDate()); // TODO collapse()
-		} else {
-			task.getEnd().setDate(newDate);
+			task.getBegin().setDate(newDate);
 		}
 	}
 
 	public Task updateTaskBegin(long taskId, LocalDate newDate) {
-		return updateTaskBegin(getTask(taskId), newDate);
+		Task task = getTask(taskId);
+		if (newDate.isBefore(task.getBegin().getDate())) {
+			return updateTaskBegin(task, newDate);
+		} else if (newDate.isAfter(getBegin().getDate())) {
+			posticipateTaskBegin(task, newDate);
+			for (Task c : task.getTasks()) {
+				if (newDate.isAfter(c.getBegin().getDate())) {
+					posticipateTaskBegin(c, newDate);
+				}
+			}
+			return this;
+		} else {
+			return this;
+		}
+	}
+
+	private void posticipateTaskBegin(Task task, LocalDate newDate) {
+		task.getBegin().setDate(newDate);
+		if (newDate.isAfter(task.getEnd().getDate())) {
+			task.getEnd().setDate(newDate);
+		}
 	}
 
 	private Task updateTaskBegin(Task task, LocalDate newDate) {
