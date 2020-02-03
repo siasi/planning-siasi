@@ -1,18 +1,8 @@
 {
    "id":0,
    "name":"My Project",
-   "begin":{
-      "date":"2020-06-12",
-      "constraints":[
-
-      ]
-   },
-   "end":{
-      "date":"2020-06-20",
-      "constraints":[
-
-      ]
-   },
+   "begin":"2020-06-12",
+   "end":"2020-06-20",
    "tasks":[
       
    ]

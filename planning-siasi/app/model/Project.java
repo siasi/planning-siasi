@@ -12,17 +12,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Project extends Task {
 
 	private Map<Long, Task> taskIdToTask = new HashMap<>();
-	private List<Constraint> constraints = new ArrayList<>();
 
-	public Project(String name, TaskSide begin, TaskSide end) {
+	private List<Constraint> constraints;
+
+	public Project(String name, LocalDate begin, LocalDate end) {
 		super(name, begin, end);
+		this.constraints = new ArrayList<>();
 	}
 
 	@JsonCreator
 	public Project(@JsonProperty("id") long id, @JsonProperty("name") String name,
-			@JsonProperty("begin") TaskSide begin, @JsonProperty("end") TaskSide end,
-			@JsonProperty("tasks") List<Task> tasks) {
+			@JsonProperty("begin") LocalDate begin, @JsonProperty("end") LocalDate end,
+			@JsonProperty("tasks") List<Task> tasks, @JsonProperty("constraints") List<Constraint> constraints) {
 		super(id, name, begin, end, tasks);
+		this.constraints = constraints;
+		if (this.constraints == null) {
+			this.constraints = new ArrayList<>();
+		}
+	}
+
+	public List<Constraint> getConstraints() {
+		return constraints;
 	}
 
 	public boolean isValid() {
@@ -67,9 +77,6 @@ public class Project extends Task {
 			}
 		}
 
-		buildConstraints(currentTask, currentTask.getBegin(), SideType.BEGIN);
-		buildConstraints(currentTask, currentTask.getEnd(), SideType.END);
-
 		for (Task t : currentTask.getTasks()) {
 			if (!validateTaskDuration(t, currentTask)) {
 				return false;
@@ -79,17 +86,12 @@ public class Project extends Task {
 		return true;
 	}
 
-	private void buildConstraints(Task currentTask, TaskSide side, SideType sideType) {
-		side.getConstraints()
-				.forEach(c -> constraints.add(new Constraint(new ConstraintSide(currentTask.getId(), sideType), c)));
-	}
-
 	public Task updateTaskEnd(long taskId, LocalDate newEnd) {
-		return getTask(taskId).setEnd(newEnd);
+		return getTask(taskId).updateEnd(newEnd);
 	}
 
 	public Task updateTaskBegin(long taskId, LocalDate newBegin) {
-		return getTask(taskId).setBegin(newBegin);
+		return getTask(taskId).updateBegin(newBegin);
 	}
 
 	private Task getTask(long taskId) {

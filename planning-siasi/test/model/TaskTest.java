@@ -11,37 +11,36 @@ public class TaskTest {
 
 	@Test
 	public void whenDatesFitThoseOfTheProject_shouldBeAValidTask() {
-		Project project = new Project("project", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-20")));
-		Task task = new Task("task", new TaskSide(parse("2020-06-13")), new TaskSide(parse("2020-06-19")));
+		Project project = new Project("project", parse("2020-06-12"), parse("2020-06-20"));
+		Task task = new Task("task", parse("2020-06-13"), parse("2020-06-19"));
 		project.addTask(task);
 		Assert.assertTrue(project.isValid());
 	}
 
 	@Test
 	public void whenBeginBeforeTheProject_shouldNotBeAValidTask() {
-		Project project = new Project("project", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-20")));
+		Project project = new Project("project", parse("2020-06-12"), parse("2020-06-20"));
 
-		Task task = new Task("task", new TaskSide(parse("2020-06-11")), new TaskSide(parse("2020-06-20")));
+		Task task = new Task("task", parse("2020-06-11"), parse("2020-06-20"));
 		project.addTask(task);
 		Assert.assertFalse(project.isValid());
 	}
 
 	@Test
 	public void whenCompleteAfterTheProject_shouldNotBeAValidTask() {
-		Project project = new Project("project", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-20")));
-		Task task = new Task("task", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-21")));
+		Project project = new Project("project", parse("2020-06-12"), parse("2020-06-20"));
+		Task task = new Task("task", parse("2020-06-12"), parse("2020-06-21"));
 		project.addTask(task);
 		Assert.assertFalse(project.isValid());
 	}
 
 	@Test
 	public void whenTheNestedTaskBeginBefore_shouldNotBeAValidTask() {
-		Project project = new Project("project", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-20")));
-		Task task = new Task("task", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-19")));
+		Project project = new Project("project", parse("2020-06-12"), parse("2020-06-20"));
+		Task task = new Task("task", parse("2020-06-12"), parse("2020-06-19"));
 		project.addTask(task);
 
-		Task nestedTask = new Task("task", new TaskSide(LocalDate.parse("2020-06-11")),
-				new TaskSide(LocalDate.parse("2020-06-20")));
+		Task nestedTask = new Task("task", LocalDate.parse("2020-06-11"), LocalDate.parse("2020-06-20"));
 		task.addTask(nestedTask);
 
 		Assert.assertFalse(project.isValid());
@@ -49,12 +48,11 @@ public class TaskTest {
 
 	@Test
 	public void whenTheNestedTaskCompleteAfter_shouldNotBeAValidTask() {
-		Project project = new Project("project", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-20")));
-		Task task = new Task("task", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-21")));
+		Project project = new Project("project", parse("2020-06-12"), parse("2020-06-20"));
+		Task task = new Task("task", parse("2020-06-12"), parse("2020-06-21"));
 		project.addTask(task);
 
-		Task nestedTask = new Task("task", new TaskSide(LocalDate.parse("2020-06-12")),
-				new TaskSide(LocalDate.parse("2020-06-22")));
+		Task nestedTask = new Task("task", LocalDate.parse("2020-06-12"), LocalDate.parse("2020-06-22"));
 		task.addTask(nestedTask);
 
 		Assert.assertFalse(project.isValid());
@@ -62,20 +60,17 @@ public class TaskTest {
 
 	@Test
 	public void whenOneNestedTaskBeginAfter_shouldNotBeAValidTask() {
-		Project project = new Project("project", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-20")));
-		Task task = new Task("task", new TaskSide(parse("2020-06-12")), new TaskSide(parse("2020-06-21")));
+		Project project = new Project("project", parse("2020-06-12"), parse("2020-06-20"));
+		Task task = new Task("task", parse("2020-06-12"), parse("2020-06-21"));
 		project.addTask(task);
 
-		Task nestedTaskA = new Task("task", new TaskSide(LocalDate.parse("2020-06-12")),
-				new TaskSide(LocalDate.parse("2020-06-14")));
+		Task nestedTaskA = new Task("task", LocalDate.parse("2020-06-12"), LocalDate.parse("2020-06-14"));
 		task.addTask(nestedTaskA);
 
-		Task nestedTaskB = new Task("task", new TaskSide(LocalDate.parse("2020-06-11")),
-				new TaskSide(LocalDate.parse("2020-06-21")));
+		Task nestedTaskB = new Task("task", LocalDate.parse("2020-06-11"), LocalDate.parse("2020-06-21"));
 		task.addTask(nestedTaskB);
 
-		Task nestedTaskC = new Task("task", new TaskSide(LocalDate.parse("2020-06-13")),
-				new TaskSide(LocalDate.parse("2020-06-18")));
+		Task nestedTaskC = new Task("task", LocalDate.parse("2020-06-13"), LocalDate.parse("2020-06-18"));
 		task.addTask(nestedTaskC);
 
 		Assert.assertFalse(project.isValid());

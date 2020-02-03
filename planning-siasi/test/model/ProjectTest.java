@@ -55,7 +55,7 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-21"));
-		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getEnd());
 		Assert.assertEquals(project, highestModifiedTask);
 	}
 
@@ -66,9 +66,9 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskEnd(100, LocalDate.parse("2020-06-21"));
-		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getTasks().get(0).getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getTasks().get(0).getEnd());
 		Assert.assertEquals(project, highestModifiedTask);
-		Assert.assertEquals(highestModifiedTask.getEnd().getDate(), LocalDate.parse("2020-06-21"));
+		Assert.assertEquals(highestModifiedTask.getEnd(), LocalDate.parse("2020-06-21"));
 	}
 
 	@Test
@@ -78,10 +78,10 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskEnd(100, LocalDate.parse("2020-06-19"));
-		Assert.assertEquals(LocalDate.parse("2020-06-19"), project.getTasks().get(0).getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-19"), project.getTasks().get(0).getEnd());
 		Assert.assertEquals(project.getTasks().get(0), highestModifiedTask);
-		Assert.assertEquals(highestModifiedTask.getEnd().getDate(), LocalDate.parse("2020-06-19"));
-		Assert.assertEquals(project.getEnd().getDate(), LocalDate.parse("2020-06-20"));
+		Assert.assertEquals(highestModifiedTask.getEnd(), LocalDate.parse("2020-06-19"));
+		Assert.assertEquals(project.getEnd(), LocalDate.parse("2020-06-20"));
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-18"));
-		Assert.assertEquals(LocalDate.parse("2020-06-18"), project.getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-18"), project.getEnd());
 		Assert.assertEquals(project, highestModifiedTask);
 	}
 
@@ -102,7 +102,7 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-12"));
-		Assert.assertEquals(LocalDate.parse("2020-06-12"), project.getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-12"), project.getEnd());
 		Assert.assertEquals(project, highestModifiedTask);
 	}
 
@@ -113,8 +113,8 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-11"));
-		Assert.assertEquals(LocalDate.parse("2020-06-11"), project.getEnd().getDate());
-		Assert.assertEquals(project.getEnd().getDate(), project.getBegin().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-11"), project.getEnd());
+		Assert.assertEquals(project.getEnd(), project.getBegin());
 		Assert.assertEquals(project, highestModifiedTask);
 	}
 
@@ -125,9 +125,9 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskEnd(10, LocalDate.parse("2020-06-17"));
-		Assert.assertEquals(LocalDate.parse("2020-06-17"), project.getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-17"), project.getEnd());
 		Assert.assertEquals(project, highestModifiedTask);
-		Assert.assertEquals(LocalDate.parse("2020-06-17"), project.getTasks().get(0).getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-17"), project.getTasks().get(0).getEnd());
 	}
 
 	@Test
@@ -137,9 +137,9 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskEnd(10, LocalDate.parse("2020-06-19"));
-		Assert.assertEquals(LocalDate.parse("2020-06-19"), project.getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-19"), project.getEnd());
 		Assert.assertEquals(project, highestModifiedTask);
-		Assert.assertEquals(LocalDate.parse("2020-06-18"), project.getTasks().get(0).getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-18"), project.getTasks().get(0).getEnd());
 	}
 
 	@Test
@@ -148,7 +148,7 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskBegin(0, LocalDate.parse("2020-06-10"));
-		Assert.assertEquals(LocalDate.parse("2020-06-10"), project.getBegin().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-10"), project.getBegin());
 		Assert.assertEquals(project, highestModifiedTask);
 	}
 
@@ -159,9 +159,9 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskBegin(100, LocalDate.parse("2020-06-10"));
-		Assert.assertEquals(LocalDate.parse("2020-06-10"), project.getTasks().get(0).getBegin().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-10"), project.getTasks().get(0).getBegin());
 		Assert.assertEquals(project, highestModifiedTask);
-		Assert.assertEquals(highestModifiedTask.getBegin().getDate(), LocalDate.parse("2020-06-10"));
+		Assert.assertEquals(LocalDate.parse("2020-06-10"), highestModifiedTask.getBegin());
 	}
 
 	@Test
@@ -171,10 +171,10 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskBegin(100, LocalDate.parse("2020-06-13"));
-		Assert.assertEquals(LocalDate.parse("2020-06-13"), project.getTasks().get(0).getBegin().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-13"), project.getTasks().get(0).getBegin());
 		Assert.assertEquals(project.getTasks().get(0), highestModifiedTask);
-		Assert.assertEquals(highestModifiedTask.getBegin().getDate(), LocalDate.parse("2020-06-13"));
-		Assert.assertEquals(project.getBegin().getDate(), LocalDate.parse("2020-06-12"));
+		Assert.assertEquals(highestModifiedTask.getBegin(), LocalDate.parse("2020-06-13"));
+		Assert.assertEquals(project.getBegin(), LocalDate.parse("2020-06-12"));
 	}
 
 	/// TODO
@@ -186,7 +186,7 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskBegin(0, LocalDate.parse("2020-06-14"));
-		Assert.assertEquals(LocalDate.parse("2020-06-14"), project.getBegin().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-14"), project.getBegin());
 		Assert.assertEquals(project, highestModifiedTask);
 	}
 
@@ -197,7 +197,7 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskBegin(0, LocalDate.parse("2020-06-20"));
-		Assert.assertEquals(LocalDate.parse("2020-06-20"), project.getBegin().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-20"), project.getBegin());
 		Assert.assertEquals(project, highestModifiedTask);
 	}
 
@@ -208,8 +208,8 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskBegin(0, LocalDate.parse("2020-06-21"));
-		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getBegin().getDate());
-		Assert.assertEquals(project.getBegin().getDate(), project.getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getBegin());
+		Assert.assertEquals(project.getBegin(), project.getEnd());
 		Assert.assertEquals(project, highestModifiedTask);
 	}
 
@@ -220,9 +220,9 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskBegin(10, LocalDate.parse("2020-06-15"));
-		Assert.assertEquals(LocalDate.parse("2020-06-15"), project.getBegin().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-15"), project.getBegin());
 		Assert.assertEquals(project, highestModifiedTask);
-		Assert.assertEquals(LocalDate.parse("2020-06-15"), project.getTasks().get(0).getBegin().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-15"), project.getTasks().get(0).getBegin());
 	}
 
 	@Test
@@ -232,9 +232,9 @@ public class ProjectTest {
 		Assert.assertTrue(project.isValid());
 
 		Task highestModifiedTask = project.updateTaskBegin(10, LocalDate.parse("2020-06-13"));
-		Assert.assertEquals(LocalDate.parse("2020-06-13"), project.getBegin().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-13"), project.getBegin());
 		Assert.assertEquals(project, highestModifiedTask);
-		Assert.assertEquals(LocalDate.parse("2020-06-14"), project.getTasks().get(0).getBegin().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-14"), project.getTasks().get(0).getBegin());
 	}
 
 }

@@ -12,7 +12,7 @@ public class ProjectStoreTest {
 	@Test
 	public void shouldStoreAProject() {
 		ProjectStore store = new ProjectStore();
-		Project project = new Project("name", new TaskSide(parse("2020-01-01")), new TaskSide(parse("2020-01-10")));
+		Project project = new Project("name", parse("2020-01-01"), parse("2020-01-10"));
 		store.addProject(project);
 
 		Assert.assertNotEquals(Optional.empty(), store.getProject(0));

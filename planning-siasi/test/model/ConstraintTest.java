@@ -63,10 +63,8 @@ public class ConstraintTest {
 		ConstraintSide to = new ConstraintSide(1, constraintSideB);
 		Constraint c = new Constraint(from, to);
 		Map<Long, Task> taskIdToTask = new HashMap<>();
-		taskIdToTask.put(0L,
-				new Task("", new TaskSide(LocalDate.parse(taskABegin)), new TaskSide(LocalDate.parse(taskAEnd))));
-		taskIdToTask.put(1L,
-				new Task("", new TaskSide(LocalDate.parse(taskBBegin)), new TaskSide(LocalDate.parse(taskBEnd))));
+		taskIdToTask.put(0L, new Task("", LocalDate.parse(taskABegin), LocalDate.parse(taskAEnd)));
+		taskIdToTask.put(1L, new Task("", LocalDate.parse(taskBBegin), LocalDate.parse(taskBEnd)));
 
 		if (expectedToBeValid) {
 			Assert.assertTrue(c.isValid(taskIdToTask));

@@ -15,70 +15,173 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class ParsingTest {
 
 	@Test
-	public void shouldParseAConstraint() throws JsonMappingException, JsonProcessingException {
+	public void shouldParseAConstraintSide() throws JsonMappingException, JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
-		ConstraintSide side = objectMapper.readValue("{ \n" + "					\"taskId\" : 102, \n"
-				+ "					\"side\" : \"END\"\n" + "				}", ConstraintSide.class);
+		//@formatter:off
+		ConstraintSide side = objectMapper.readValue("{ \n" + 
+				"					\"taskId\" : 102, \n" + 
+				"					\"side\" : \"END\"\n" + 
+				"				}", ConstraintSide.class);
+		//@formatter:on
 		Assert.assertEquals(102, side.getTaskId());
 		Assert.assertEquals(SideType.END, side.getSide());
-	
+
 	}
 
 	@Test
-	public void shouldParseASide() throws JsonParseException, JsonMappingException, IOException {
+	public void shouldParseAConstraint() throws JsonMappingException, JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
-		TaskSide side = objectMapper.readValue(
-				"{\n" + "      \"date\":\"2020-06-20\",\n" + "      \"constraints\":[]\n" + "   }", TaskSide.class);
-		Assert.assertNotNull(side.getDate());
-		Assert.assertFalse(side.hasConstraints());
-		Assert.assertEquals(LocalDate.parse("2020-06-20"), side.getDate());
+		//@formatter:off
+		Constraint c = objectMapper.readValue("{\n" + 
+				"         \"from\":{\n" + 
+				"            \"taskId\":100,\n" + 
+				"            \"side\":\"BEGIN\"\n" + 
+				"         },\n" + 
+				"         \"to\":{\n" + 
+				"            \"taskId\":102,\n" + 
+				"            \"side\":\"END\"\n" + 
+				"         }\n" + 
+				"      }", Constraint.class);
+		//@formatter:on
+		Assert.assertEquals(100, c.getFrom().getTaskId());
+		Assert.assertEquals(SideType.BEGIN, c.getFrom().getSide());
+		Assert.assertEquals(102, c.getTo().getTaskId());
+		Assert.assertEquals(SideType.END, c.getTo().getSide());
+
 	}
+
+	// @Test
+	// public void shouldParseASide() throws JsonParseException,
+	// JsonMappingException, IOException {
+	// ObjectMapper objectMapper = new ObjectMapper();
+	// objectMapper.registerModule(new JavaTimeModule());
+//		//@formatter:off
+//		TaskSide side = objectMapper.readValue("{\n" + 
+//				"      \"date\":\"2020-06-20\",\n" + 
+//				"      \"constraints\":[]\n" + 
+//				"   }", TaskSide.class);
+//		//@formatter:on
+	// Assert.assertNotNull(side.getDate());
+	// Assert.assertFalse(side.hasConstraints());
+	// Assert.assertEquals(LocalDate.parse("2020-06-20"), side.getDate());
+	// }
 
 	@Test
 	public void shouldParseATask() throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
-		Task task = objectMapper.readValue("{\n" + "         \"id\":300,\n" + "         \"name\":\"Third Big Task\",\n"
-				+ "         \"begin\":{\n" + "            \"date\":\"2020-06-18\",\n"
-				+ "            \"constraints\":[\n" + "\n" + "            ]\n" + "         },\n"
-				+ "         \"end\":{\n" + "            \"date\":\"2020-06-20\",\n" + "            \"constraints\":[\n"
-				+ "\n" + "            ]\n" + "         },\n" + "         \"tasks\":[\n" + "\n" + "         ]\n"
-				+ "      }", Task.class);
+		//@formatter:off
+		Task task = objectMapper.readValue("{" + 
+				"           \"id\":300," + 
+				"           \"name\":\"Third Big Task\"," + 
+				"           \"begin\":\"2020-06-18\"," + 
+				"           \"end\":\"2020-06-20\"" +
+				"         }," + 
+				"         \"tasks\":[]" +  
+				"      }", Task.class);
+		//@formatter:on
 		Assert.assertNotNull(task.getBegin());
 		Assert.assertNotNull(task.getEnd());
-		Assert.assertEquals(LocalDate.parse("2020-06-18"), task.getBegin().getDate());
-		Assert.assertEquals(LocalDate.parse("2020-06-20"), task.getEnd().getDate());
-		Assert.assertFalse(task.getBegin().hasConstraints());
-		Assert.assertFalse(task.getEnd().hasConstraints());
+		Assert.assertEquals(LocalDate.parse("2020-06-18"), task.getBegin());
+		Assert.assertEquals(LocalDate.parse("2020-06-20"), task.getEnd());
 	}
 
 	@Test
 	public void shouldParseAProject() throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
-		Project project = objectMapper.readValue("{\n" + "   \"id\":10,\n" + "   \"name\":\"My Project\",\n"
-				+ "   \"begin\":{\n" + "      \"date\":\"2020-06-12\",\n" + "      \"constraints\":[]\n" + "   },\n"
-				+ "   \"end\":{\n" + "      \"date\":\"2020-06-20\",\n" + "      \"constraints\":[]\n" + "   },\n"
-				+ "   \"tasks\":[\n" + "      {\n" + "         \"id\":100,\n"
-				+ "         \"name\":\"First Big Task\",\n" + "         \"begin\":{\n"
-				+ "            \"date\":\"2020-06-12\",\n" + "            \"constraints\":[\n" + "\n"
-				+ "            ]\n" + "         },\n" + "         \"end\":{\n"
-				+ "            \"date\":\"2020-06-20\",\n" + "            \"constraints\":[\n" + "\n"
-				+ "            ]\n" + "         },\n" + "         \"tasks\":[\n" + "            {\n"
-				+ "               \"id\":101,\n" + "               \"name\":\"First Big Task - A\",\n"
-				+ "               \"begin\":{\n" + "                  \"date\":\"2020-06-12\",\n"
-				+ "                  \"constraints\":[\n" + "\n" + "                  ]\n" + "               },\n"
-				+ "               \"end\":{\n" + "                  \"date\":\"2020-06-15\",\n"
-				+ "                  \"constraints\":[\n" + "\n" + "                  ]\n" + "               }\n"
-				+ "            }\n" + "         ]\n" + "      }]\n" + "}}", Project.class);
+		//@formatter:off
+		Project project = objectMapper.readValue("{\n" + 
+				"   \"id\":10,\n" + 
+				"   \"name\":\"My Project\",\n" + 
+				"   \"begin\":\"2020-06-12\",\n" + 
+				"   \"end\":\"2020-06-20\",\n" + 
+				"   \"tasks\":[\n" + 
+				"      {\n" + 
+				"         \"id\":100,\n" + 
+				"         \"name\":\"First Big Task\",\n" + 
+				"         \"begin\":\"2020-06-12\",\n" + 
+				"         \"end\":\"2020-06-20\",\n" + 
+				"         \"tasks\":[\n" + 
+				"            {\n" + 
+				"               \"id\":101,\n" + 
+				"               \"name\":\"First Big Task - A\",\n" + 
+				"               \"begin\":\"2020-06-12\",\n" + 
+				"               \"end\":\"2020-06-15\"\n" + 
+				"            },\n" + 
+				"            {\n" + 
+				"               \"id\":102,\n" + 
+				"               \"name\":\"First Big Task - B\",\n" + 
+				"               \"begin\":\"2020-06-14\",\n" + 
+				"               \"end\":\"2020-06-14\"\n" + 
+				"            }\n" + 
+				"         ]\n" + 
+				"      }\n" + 
+				"   ]\n" + 
+				"}", Project.class);
+		//@formatter:on
 		Assert.assertNotNull(project.getBegin());
 		Assert.assertNotNull(project.getEnd());
-		Assert.assertEquals(LocalDate.parse("2020-06-12"), project.getBegin().getDate());
-		Assert.assertEquals(LocalDate.parse("2020-06-20"), project.getEnd().getDate());
+		Assert.assertEquals(LocalDate.parse("2020-06-12"), project.getBegin());
+		Assert.assertEquals(LocalDate.parse("2020-06-20"), project.getEnd());
 		Assert.assertEquals(1, project.getTasks().size());
-		Assert.assertEquals(1, project.getTasks().get(0).getTasks().size());
+		Assert.assertEquals(2, project.getTasks().get(0).getTasks().size());
+	}
+
+	@Test
+	public void shouldParseAProject_withConstraints() throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		//@formatter:off
+		Project project = objectMapper.readValue("{\n" + 
+				"   \"id\":10,\n" + 
+				"   \"name\":\"My Project\",\n" + 
+				"   \"begin\":\"2020-06-12\",\n" + 
+				"   \"end\":\"2020-06-20\",\n" + 
+				"   \"tasks\":[\n" + 
+				"      {\n" + 
+				"         \"id\":100,\n" + 
+				"         \"name\":\"First Big Task\",\n" + 
+				"         \"begin\":\"2020-06-12\",\n" + 
+				"         \"end\":\"2020-06-20\",\n" + 
+				"         \"tasks\":[\n" + 
+				"            {\n" + 
+				"               \"id\":101,\n" + 
+				"               \"name\":\"First Big Task - A\",\n" + 
+				"               \"begin\":\"2020-06-12\",\n" + 
+				"               \"end\":\"2020-06-15\"\n" + 
+				"            },\n" + 
+				"            {\n" + 
+				"               \"id\":102,\n" + 
+				"               \"name\":\"First Big Task - B\",\n" + 
+				"               \"begin\":\"2020-06-14\",\n" + 
+				"               \"end\":\"2020-06-14\"\n" + 
+				"            }\n" + 
+				"         ]\n" + 
+				"      }\n" + 
+				"   ]\n," +
+				"\"constraints\":[ {" + 
+				"         \"from\":{\n" + 
+				"            \"taskId\":100,\n" + 
+				"            \"side\":\"BEGIN\"\n" + 
+				"         },\n" + 
+				"         \"to\":{\n" + 
+				"            \"taskId\":102,\n" + 
+				"            \"side\":\"END\"\n" + 
+				"         }\n" + 
+				"      }\n" +  
+				"   ]" +
+				"}", Project.class);
+		//@formatter:on
+		Assert.assertNotNull(project.getBegin());
+		Assert.assertNotNull(project.getEnd());
+		Assert.assertEquals(LocalDate.parse("2020-06-12"), project.getBegin());
+		Assert.assertEquals(LocalDate.parse("2020-06-20"), project.getEnd());
+		Assert.assertEquals(1, project.getTasks().size());
+		Assert.assertEquals(2, project.getTasks().get(0).getTasks().size());
+		Assert.assertEquals(1, project.getConstraints().size());
 	}
 
 }
