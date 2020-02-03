@@ -142,21 +142,33 @@ public class Task {
 	}
 
 	public Task updateBegin(LocalDate newBegin) {
-		return updateBegin(this, newBegin);
+		ArrayList<Constraint> notValidConstraints = new ArrayList<>();
+		return updateBegin(this, newBegin, notValidConstraints);
 	}
 
-	private Task updateBegin(Task task, LocalDate newDate) {
+	private Task updateBegin(Task task, LocalDate newDate, ArrayList<Constraint> notValidConstraints) {
 		if (newDate.isBefore(task.getBegin())) {
 			task.setBegin(newDate);
 			if (task.hasParent() && newDate.isBefore(task.getParent().getBegin())) {
-				return updateBegin(task.getParent(), newDate);
+				return updateBegin(task.getParent(), newDate, notValidConstraints);
 			}
 			return task;
 		} else if (newDate.isAfter(task.getBegin())) {
-			posticipateBegin(task, newDate);
+			task.setBegin(newDate);
+			if (newDate.isAfter(task.getEnd())) {
+				task.updateEnd(newDate);
+			}
+			// Remove the ingoing constraints no more valid, if any
+			// for (Constraint c : ingoingConstraints) {
+			// if (!c.isValid()) {
+			// notValidConstraints.add(c);
+			// }
+			// }
+			// ingoingConstraints.removeAll(notValidConstraints);
+			// validate
 			for (Task c : task.getTasks()) {
 				if (newDate.isAfter(c.getBegin())) {
-					updateBegin(c, newDate);
+					updateBegin(c, newDate, notValidConstraints);
 				}
 			}
 			return this;

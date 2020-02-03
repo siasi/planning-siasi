@@ -56,7 +56,7 @@ public class Project extends Task {
 			c.setToTask(to);
 			to.addIngoingConstraint(c);
 
-			if (!c.isValid(taskIdToTask)) {
+			if (!c.isValid()) {
 				return false;
 			}
 		}

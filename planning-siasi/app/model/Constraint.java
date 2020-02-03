@@ -1,7 +1,6 @@
 package model;
 
 import java.time.LocalDate;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,12 +23,9 @@ public class Constraint {
 		return to;
 	}
 
-	public boolean isValid(Map<Long, Task> taskIdToTask) {
-		Task taskFrom = taskIdToTask.get(from.getTaskId());
-		Task taskTo = taskIdToTask.get(to.getTaskId());
-
-		LocalDate fromDate = taskFrom.getDate(from.getSide());
-		LocalDate toDate = taskTo.getDate(to.getSide());
+	public boolean isValid() {
+		LocalDate fromDate = from.getDate();
+		LocalDate toDate = to.getDate();
 		return fromDate.isBefore(toDate);
 	}
 

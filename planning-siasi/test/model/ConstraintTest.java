@@ -5,8 +5,6 @@ import static model.SideType.END;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -62,14 +60,12 @@ public class ConstraintTest {
 		ConstraintSide from = new ConstraintSide(0, constraintSideA);
 		ConstraintSide to = new ConstraintSide(1, constraintSideB);
 		Constraint c = new Constraint(from, to);
-		Map<Long, Task> taskIdToTask = new HashMap<>();
-		taskIdToTask.put(0L, new Task("", LocalDate.parse(taskABegin), LocalDate.parse(taskAEnd)));
-		taskIdToTask.put(1L, new Task("", LocalDate.parse(taskBBegin), LocalDate.parse(taskBEnd)));
-
+		c.setFromTask(new Task("", LocalDate.parse(taskABegin), LocalDate.parse(taskAEnd)));
+		c.setToTask(new Task("", LocalDate.parse(taskBBegin), LocalDate.parse(taskBEnd)));
 		if (expectedToBeValid) {
-			Assert.assertTrue(c.isValid(taskIdToTask));
+			Assert.assertTrue(c.isValid());
 		} else {
-			Assert.assertFalse(c.isValid(taskIdToTask));
+			Assert.assertFalse(c.isValid());
 		}
 	}
 

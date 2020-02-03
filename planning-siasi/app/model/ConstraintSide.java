@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ConstraintSide {
@@ -54,6 +56,14 @@ public class ConstraintSide {
 		if (taskId != other.taskId)
 			return false;
 		return true;
+	}
+
+	public Task getTask() {
+		return task;
+	}
+
+	public LocalDate getDate() {
+		return task.getDate(side);
 	}
 
 }
