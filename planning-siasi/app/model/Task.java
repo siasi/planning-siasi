@@ -106,23 +106,30 @@ public class Task {
 		return parent != null;
 	}
 
-	public Task updateEnd(LocalDate newEnd) {
-		return updateEnd(this, newEnd);
+	public List<Constraint> updateEnd(LocalDate newEnd) {
+		List<Constraint> invalidConstraints = new ArrayList<>();
+		updateEnd(this, newEnd, invalidConstraints);
+		return invalidConstraints;
 	}
 
-	private Task updateEnd(Task task, LocalDate newEnd) {
+	private Task updateEnd(Task task, LocalDate newEnd, List<Constraint> invalidConstraints) {
 		if (newEnd.isBefore(task.getEnd())) {
-			anticipateEnd(task, newEnd);
+			task.setEnd(newEnd);
+			if (newEnd.isBefore(task.getBegin())) {
+				updateBegin(this, newEnd, invalidConstraints);
+			}
+			removeInvalidIngoingConstraints(invalidConstraints);
 			for (Task c : task.getTasks()) {
 				if (newEnd.isBefore(c.getEnd())) {
-					updateEnd(c, newEnd);
+					updateEnd(c, newEnd, invalidConstraints);
 				}
 			}
 			return this;
 		} else if (newEnd.isAfter(task.getEnd())) {
 			task.setEnd(newEnd);
+			removeInvalidOutgoingConstraints(invalidConstraints);
 			if (task.hasParent() && newEnd.isAfter(task.getParent().getEnd())) {
-				return updateEnd(task.getParent(), newEnd);
+				return updateEnd(task.getParent(), newEnd, invalidConstraints);
 			}
 			return task;
 		} else {
@@ -130,45 +137,61 @@ public class Task {
 		}
 	}
 
+	private void removeInvalidOutgoingConstraints(List<Constraint> invalidConstraints) {
+		for (Constraint c : outgoingConstraints) {
+			if (!c.isValid()) {
+				invalidConstraints.add(c);
+			}
+		}
+		// Remove from this task
+		outgoingConstraints.removeAll(invalidConstraints);
+		// Remove from the other task
+		for (Constraint c : invalidConstraints) {
+			c.getTo().getTask().removeIngoingConstraint(c);
+		}
+	}
+
+	private void removeInvalidIngoingConstraints(List<Constraint> invalidConstraints) {
+		for (Constraint c : ingoingConstraints) {
+			if (!c.isValid()) {
+				invalidConstraints.add(c);
+			}
+		}
+		// Remove from this task
+		ingoingConstraints.removeAll(invalidConstraints);
+		// Remove from the other task
+		for (Constraint c : invalidConstraints) {
+			c.getFrom().getTask().removeOutgoingConstraint(c);
+		}
+	}
+
 	private void setEnd(LocalDate newEnd) {
 		this.end = newEnd;
 	}
 
-	private void anticipateEnd(Task task, LocalDate newDate) {
-		task.setEnd(newDate);
-		if (newDate.isBefore(task.getBegin())) {
-			task.updateBegin(newDate);
-		}
+	public List<Constraint> updateBegin(LocalDate newBegin) {
+		ArrayList<Constraint> invalidConstraints = new ArrayList<>();
+		updateBegin(this, newBegin, invalidConstraints);
+		return invalidConstraints;
 	}
 
-	public Task updateBegin(LocalDate newBegin) {
-		ArrayList<Constraint> notValidConstraints = new ArrayList<>();
-		return updateBegin(this, newBegin, notValidConstraints);
-	}
-
-	private Task updateBegin(Task task, LocalDate newDate, ArrayList<Constraint> notValidConstraints) {
+	private Task updateBegin(Task task, LocalDate newDate, List<Constraint> invalidConstraints) {
 		if (newDate.isBefore(task.getBegin())) {
 			task.setBegin(newDate);
+			removeInvalidIngoingConstraints(invalidConstraints);
 			if (task.hasParent() && newDate.isBefore(task.getParent().getBegin())) {
-				return updateBegin(task.getParent(), newDate, notValidConstraints);
+				return updateBegin(task.getParent(), newDate, invalidConstraints);
 			}
 			return task;
 		} else if (newDate.isAfter(task.getBegin())) {
 			task.setBegin(newDate);
 			if (newDate.isAfter(task.getEnd())) {
-				task.updateEnd(newDate);
+				updateEnd(task, newDate, invalidConstraints);
 			}
-			// Remove the ingoing constraints no more valid, if any
-			// for (Constraint c : ingoingConstraints) {
-			// if (!c.isValid()) {
-			// notValidConstraints.add(c);
-			// }
-			// }
-			// ingoingConstraints.removeAll(notValidConstraints);
-			// validate
+			removeInvalidOutgoingConstraints(invalidConstraints);
 			for (Task c : task.getTasks()) {
 				if (newDate.isAfter(c.getBegin())) {
-					updateBegin(c, newDate, notValidConstraints);
+					updateBegin(c, newDate, invalidConstraints);
 				}
 			}
 			return this;
@@ -179,13 +202,6 @@ public class Task {
 
 	private void setBegin(LocalDate newDate) {
 		this.begin = newDate;
-	}
-
-	private void posticipateBegin(Task task, LocalDate newDate) {
-		task.setBegin(newDate);
-		if (newDate.isAfter(task.getEnd())) {
-			task.updateEnd(newDate);
-		}
 	}
 
 	public boolean endsBefore(LocalDate otherDate) {
@@ -204,8 +220,16 @@ public class Task {
 		this.ingoingConstraints.add(c);
 	}
 
+	private void removeIngoingConstraint(Constraint c) {
+		this.ingoingConstraints.remove(c);
+	}
+
 	public void addOutgoingConstraint(Constraint c) {
 		this.outgoingConstraints.add(c);
+	}
+
+	private void removeOutgoingConstraint(Constraint c) {
+		this.outgoingConstraints.remove(c);
 	}
 
 	List<Constraint> getOutgoingConstraints() {

@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import model.Project;
 import model.ProjectStore;
-import model.Task;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
@@ -85,9 +84,8 @@ public class ProjectController extends Controller {
 					return notFound(createResponse("Project not found", false));
 				}
 
-				Task highestModifiedTask = project.updateTaskEnd(taskId, LocalDate.parse(newDate));
-
-				JsonNode jsonObject = Json.toJson(highestModifiedTask);
+				project.updateTaskEnd(taskId, LocalDate.parse(newDate));
+				JsonNode jsonObject = Json.toJson(project);
 				return ok(createResponse(jsonObject, true));
 			}).orElse(internalServerError(createResponse("Could not update task " + taskId, false)));
 		}, context.current());

@@ -90,12 +90,16 @@ public class Project extends Task {
 		return true;
 	}
 
-	public Task updateTaskEnd(long taskId, LocalDate newEnd) {
-		return getTask(taskId).updateEnd(newEnd);
+	public List<Constraint> updateTaskEnd(long taskId, LocalDate newEnd) {
+		List<Constraint> invalidConstraints = getTask(taskId).updateEnd(newEnd);
+		constraints.removeAll(invalidConstraints);
+		return invalidConstraints;
 	}
 
-	public Task updateTaskBegin(long taskId, LocalDate newBegin) {
-		return getTask(taskId).updateBegin(newBegin);
+	public List<Constraint> updateTaskBegin(long taskId, LocalDate newBegin) {
+		List<Constraint> invalidConstraints = getTask(taskId).updateBegin(newBegin);
+		constraints.removeAll(invalidConstraints);
+		return invalidConstraints;
 	}
 
 	Task getTask(long taskId) {

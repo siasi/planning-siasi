@@ -54,10 +54,8 @@
          "id":300,
          "name":"Third Big Task",
          "begin":"2020-06-18",
-         "end":"2020-06-20",
-         "tasks":[
-
-         ]
+         "end":"2020-06-19",
+         "tasks":[]
       }
    ],
    "constraints":[

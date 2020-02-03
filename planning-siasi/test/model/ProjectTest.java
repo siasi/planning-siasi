@@ -54,9 +54,8 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-21"));
+		project.updateTaskEnd(0, LocalDate.parse("2020-06-21"));
 		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getEnd());
-		Assert.assertEquals(project, highestModifiedTask);
 	}
 
 	@Test
@@ -65,10 +64,8 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneNestedTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskEnd(100, LocalDate.parse("2020-06-21"));
+		project.updateTaskEnd(100, LocalDate.parse("2020-06-21"));
 		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getTasks().get(0).getEnd());
-		Assert.assertEquals(project, highestModifiedTask);
-		Assert.assertEquals(highestModifiedTask.getEnd(), LocalDate.parse("2020-06-21"));
 	}
 
 	@Test
@@ -77,10 +74,8 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneNestedTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskEnd(100, LocalDate.parse("2020-06-19"));
+		project.updateTaskEnd(100, LocalDate.parse("2020-06-19"));
 		Assert.assertEquals(LocalDate.parse("2020-06-19"), project.getTasks().get(0).getEnd());
-		Assert.assertEquals(project.getTasks().get(0), highestModifiedTask);
-		Assert.assertEquals(highestModifiedTask.getEnd(), LocalDate.parse("2020-06-19"));
 		Assert.assertEquals(project.getEnd(), LocalDate.parse("2020-06-20"));
 	}
 
@@ -90,9 +85,8 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-18"));
+		project.updateTaskEnd(0, LocalDate.parse("2020-06-18"));
 		Assert.assertEquals(LocalDate.parse("2020-06-18"), project.getEnd());
-		Assert.assertEquals(project, highestModifiedTask);
 	}
 
 	@Test
@@ -101,9 +95,8 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-12"));
+		project.updateTaskEnd(0, LocalDate.parse("2020-06-12"));
 		Assert.assertEquals(LocalDate.parse("2020-06-12"), project.getEnd());
-		Assert.assertEquals(project, highestModifiedTask);
 	}
 
 	@Test
@@ -112,10 +105,9 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskEnd(0, LocalDate.parse("2020-06-11"));
+		project.updateTaskEnd(0, LocalDate.parse("2020-06-11"));
 		Assert.assertEquals(LocalDate.parse("2020-06-11"), project.getEnd());
 		Assert.assertEquals(project.getEnd(), project.getBegin());
-		Assert.assertEquals(project, highestModifiedTask);
 	}
 
 	@Test
@@ -124,9 +116,8 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneNestedTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskEnd(10, LocalDate.parse("2020-06-17"));
+		project.updateTaskEnd(10, LocalDate.parse("2020-06-17"));
 		Assert.assertEquals(LocalDate.parse("2020-06-17"), project.getEnd());
-		Assert.assertEquals(project, highestModifiedTask);
 		Assert.assertEquals(LocalDate.parse("2020-06-17"), project.getTasks().get(0).getEnd());
 	}
 
@@ -136,9 +127,8 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneNestedTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskEnd(10, LocalDate.parse("2020-06-19"));
+		project.updateTaskEnd(10, LocalDate.parse("2020-06-19"));
 		Assert.assertEquals(LocalDate.parse("2020-06-19"), project.getEnd());
-		Assert.assertEquals(project, highestModifiedTask);
 		Assert.assertEquals(LocalDate.parse("2020-06-18"), project.getTasks().get(0).getEnd());
 	}
 
@@ -147,9 +137,9 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskBegin(0, LocalDate.parse("2020-06-10"));
+		project.updateTaskBegin(0, LocalDate.parse("2020-06-10"));
 		Assert.assertEquals(LocalDate.parse("2020-06-10"), project.getBegin());
-		Assert.assertEquals(project, highestModifiedTask);
+		// Assert.assertEquals(project, highestModifiedTask);
 	}
 
 	@Test
@@ -158,10 +148,11 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneNestedTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskBegin(100, LocalDate.parse("2020-06-10"));
+		project.updateTaskBegin(100, LocalDate.parse("2020-06-10"));
 		Assert.assertEquals(LocalDate.parse("2020-06-10"), project.getTasks().get(0).getBegin());
-		Assert.assertEquals(project, highestModifiedTask);
-		Assert.assertEquals(LocalDate.parse("2020-06-10"), highestModifiedTask.getBegin());
+		// Assert.assertEquals(project, highestModifiedTask);
+		// Assert.assertEquals(LocalDate.parse("2020-06-10"),
+		// highestModifiedTask.getBegin());
 	}
 
 	@Test
@@ -170,10 +161,11 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneNestedTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskBegin(100, LocalDate.parse("2020-06-13"));
+		project.updateTaskBegin(100, LocalDate.parse("2020-06-13"));
 		Assert.assertEquals(LocalDate.parse("2020-06-13"), project.getTasks().get(0).getBegin());
-		Assert.assertEquals(project.getTasks().get(0), highestModifiedTask);
-		Assert.assertEquals(highestModifiedTask.getBegin(), LocalDate.parse("2020-06-13"));
+		// Assert.assertEquals(project.getTasks().get(0), highestModifiedTask);
+		// Assert.assertEquals(highestModifiedTask.getBegin(),
+		// LocalDate.parse("2020-06-13"));
 		Assert.assertEquals(project.getBegin(), LocalDate.parse("2020-06-12"));
 	}
 
@@ -185,9 +177,9 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskBegin(0, LocalDate.parse("2020-06-14"));
+		project.updateTaskBegin(0, LocalDate.parse("2020-06-14"));
 		Assert.assertEquals(LocalDate.parse("2020-06-14"), project.getBegin());
-		Assert.assertEquals(project, highestModifiedTask);
+		// Assert.assertEquals(project, highestModifiedTask);
 	}
 
 	@Test
@@ -196,9 +188,9 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskBegin(0, LocalDate.parse("2020-06-20"));
+		project.updateTaskBegin(0, LocalDate.parse("2020-06-20"));
 		Assert.assertEquals(LocalDate.parse("2020-06-20"), project.getBegin());
-		Assert.assertEquals(project, highestModifiedTask);
+		// Assert.assertEquals(project, highestModifiedTask);
 	}
 
 	@Test
@@ -207,10 +199,10 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskBegin(0, LocalDate.parse("2020-06-21"));
+		project.updateTaskBegin(0, LocalDate.parse("2020-06-21"));
 		Assert.assertEquals(LocalDate.parse("2020-06-21"), project.getBegin());
 		Assert.assertEquals(project.getBegin(), project.getEnd());
-		Assert.assertEquals(project, highestModifiedTask);
+		// Assert.assertEquals(project, highestModifiedTask);
 	}
 
 	@Test
@@ -219,9 +211,9 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneNestedTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskBegin(10, LocalDate.parse("2020-06-15"));
+		project.updateTaskBegin(10, LocalDate.parse("2020-06-15"));
 		Assert.assertEquals(LocalDate.parse("2020-06-15"), project.getBegin());
-		Assert.assertEquals(project, highestModifiedTask);
+		// Assert.assertEquals(project, highestModifiedTask);
 		Assert.assertEquals(LocalDate.parse("2020-06-15"), project.getTasks().get(0).getBegin());
 	}
 
@@ -231,9 +223,9 @@ public class ProjectTest {
 		Project project = parse("test/resources/oneNestedTaskProject.json");
 		Assert.assertTrue(project.isValid());
 
-		Task highestModifiedTask = project.updateTaskBegin(10, LocalDate.parse("2020-06-13"));
+		project.updateTaskBegin(10, LocalDate.parse("2020-06-13"));
 		Assert.assertEquals(LocalDate.parse("2020-06-13"), project.getBegin());
-		Assert.assertEquals(project, highestModifiedTask);
+		// Assert.assertEquals(project, highestModifiedTask);
 		Assert.assertEquals(LocalDate.parse("2020-06-14"), project.getTasks().get(0).getBegin());
 	}
 
@@ -262,5 +254,148 @@ public class ProjectTest {
 		Assert.assertEquals(1, project.getTask(300).getIngoingConstraints().size());
 		Assert.assertEquals(expected202_300, project.getTask(300).getIngoingConstraints().get(0));
 	}
+
+	/*
+	 * Verify constraints are removed
+	 */
+
+	@Test
+	public void shouldRemoveInvalidConstraints_BEGIN_BEGIN_posticipateBegin()
+			throws JsonParseException, JsonMappingException, IOException {
+		Project project = parse("test/resources/unidirectionalConstraints.json");
+		Assert.assertTrue(project.isValid());
+
+		Assert.assertEquals(4, project.getConstraints().size());
+		Assert.assertEquals(1, project.getTask(100).getOutgoingConstraints().size());
+		Assert.assertEquals(1, project.getTask(200).getIngoingConstraints().size());
+		project.updateTaskBegin(100, LocalDate.parse("2020-06-18"));
+		Assert.assertEquals(0, project.getTask(100).getOutgoingConstraints().size());
+		Assert.assertEquals(0, project.getTask(200).getIngoingConstraints().size());
+		Assert.assertEquals(3, project.getConstraints().size());
+	}
+
+	@Test
+	public void shouldRemoveInvalidConstraints_BEGIN_BEGIN_anticipateBegin()
+			throws JsonParseException, JsonMappingException, IOException {
+		Project project = parse("test/resources/unidirectionalConstraints.json");
+		Assert.assertTrue(project.isValid());
+
+		Assert.assertEquals(4, project.getConstraints().size());
+		Assert.assertEquals(1, project.getTask(100).getOutgoingConstraints().size());
+		Assert.assertEquals(1, project.getTask(200).getIngoingConstraints().size());
+		project.updateTaskBegin(200, LocalDate.parse("2020-06-13"));
+		Assert.assertEquals(0, project.getTask(100).getOutgoingConstraints().size());
+		Assert.assertEquals(0, project.getTask(200).getIngoingConstraints().size());
+		Assert.assertEquals(3, project.getConstraints().size());
+	}
+
+	@Test
+	public void shouldRemoveInvalidConstraints_END_END_posticipateBegin()
+			throws JsonParseException, JsonMappingException, IOException {
+		Project project = parse("test/resources/unidirectionalConstraints.json");
+		Assert.assertTrue(project.isValid());
+
+		Assert.assertEquals(4, project.getConstraints().size());
+		Assert.assertEquals(1, project.getTask(300).getOutgoingConstraints().size());
+		Assert.assertEquals(1, project.getTask(400).getIngoingConstraints().size());
+		project.updateTaskBegin(300, LocalDate.parse("2020-06-21"));
+		Assert.assertEquals(0, project.getTask(300).getOutgoingConstraints().size());
+		Assert.assertEquals(0, project.getTask(400).getIngoingConstraints().size());
+		Assert.assertEquals(3, project.getConstraints().size());
+	}
+
+	@Test
+	public void shouldRemoveInvalidConstraints_BEGIN_END_anticipatedEnd()
+			throws JsonParseException, JsonMappingException, IOException {
+		Project project = parse("test/resources/unidirectionalConstraints.json");
+		Assert.assertTrue(project.isValid());
+
+		Assert.assertEquals(4, project.getConstraints().size());
+		Assert.assertEquals(1, project.getTask(300).getOutgoingConstraints().size());
+		Assert.assertEquals(1, project.getTask(400).getIngoingConstraints().size());
+		project.updateTaskEnd(400, LocalDate.parse("2020-06-13"));
+		Assert.assertEquals(0, project.getTask(300).getOutgoingConstraints().size());
+		Assert.assertEquals(0, project.getTask(400).getIngoingConstraints().size());
+		Assert.assertEquals(3, project.getConstraints().size());
+	}
+
+	@Test
+	public void shouldRemoveInvalidConstraints_END_BEGIN_posticipateEnd()
+			throws JsonParseException, JsonMappingException, IOException {
+		Project project = parse("test/resources/unidirectionalConstraints.json");
+		Assert.assertTrue(project.isValid());
+
+		Assert.assertEquals(4, project.getConstraints().size());
+		Assert.assertEquals(1, project.getTask(500).getOutgoingConstraints().size());
+		Assert.assertEquals(1, project.getTask(600).getIngoingConstraints().size());
+		project.updateTaskEnd(500, LocalDate.parse("2020-06-21"));
+		Assert.assertEquals(0, project.getTask(500).getOutgoingConstraints().size());
+		Assert.assertEquals(0, project.getTask(600).getIngoingConstraints().size());
+		Assert.assertEquals(3, project.getConstraints().size());
+	}
+
+	@Test
+	public void shouldRemoveInvalidConstraints_END_BEGIN_anticipatedBegin()
+			throws JsonParseException, JsonMappingException, IOException {
+		Project project = parse("test/resources/unidirectionalConstraints.json");
+		Assert.assertTrue(project.isValid());
+
+		Assert.assertEquals(4, project.getConstraints().size());
+		Assert.assertEquals(1, project.getTask(500).getOutgoingConstraints().size());
+		Assert.assertEquals(1, project.getTask(600).getIngoingConstraints().size());
+		project.updateTaskEnd(600, LocalDate.parse("2020-06-15"));
+		Assert.assertEquals(0, project.getTask(500).getOutgoingConstraints().size());
+		Assert.assertEquals(0, project.getTask(600).getIngoingConstraints().size());
+		Assert.assertEquals(3, project.getConstraints().size());
+	}
+
+	@Test
+	public void shouldRemoveInvalidConstraints_END_END_posticipateEnd()
+			throws JsonParseException, JsonMappingException, IOException {
+		Project project = parse("test/resources/unidirectionalConstraints.json");
+		Assert.assertTrue(project.isValid());
+
+		Assert.assertEquals(4, project.getConstraints().size());
+		Assert.assertEquals(1, project.getTask(700).getOutgoingConstraints().size());
+		Assert.assertEquals(1, project.getTask(800).getIngoingConstraints().size());
+		project.updateTaskEnd(700, LocalDate.parse("2020-06-21"));
+		Assert.assertEquals(0, project.getTask(700).getOutgoingConstraints().size());
+		Assert.assertEquals(0, project.getTask(800).getIngoingConstraints().size());
+		Assert.assertEquals(3, project.getConstraints().size());
+	}
+
+	@Test
+	public void shouldRemoveInvalidConstraints_END_END_anticipatedEnd()
+			throws JsonParseException, JsonMappingException, IOException {
+		Project project = parse("test/resources/unidirectionalConstraints.json");
+		Assert.assertTrue(project.isValid());
+
+		Assert.assertEquals(4, project.getConstraints().size());
+		Assert.assertEquals(1, project.getTask(700).getOutgoingConstraints().size());
+		Assert.assertEquals(1, project.getTask(800).getIngoingConstraints().size());
+		project.updateTaskEnd(800, LocalDate.parse("2020-06-15"));
+		Assert.assertEquals(0, project.getTask(700).getOutgoingConstraints().size());
+		Assert.assertEquals(0, project.getTask(800).getIngoingConstraints().size());
+		Assert.assertEquals(3, project.getConstraints().size());
+	}
+
+	@Test
+	public void shouldRemoveInvalidConstraint_BEGIN_BEGIN_posticipateBeginAndCollapse()
+			throws JsonParseException, JsonMappingException, IOException {
+		Project project = parse("test/resources/unidirectionalConstraints.json");
+		Assert.assertTrue(project.isValid());
+
+		Assert.assertEquals(4, project.getConstraints().size());
+		Assert.assertEquals(1, project.getTask(100).getOutgoingConstraints().size());
+		Assert.assertEquals(1, project.getTask(200).getIngoingConstraints().size());
+		project.updateTaskBegin(100, LocalDate.parse("2020-06-20"));
+		Assert.assertEquals(0, project.getTask(100).getOutgoingConstraints().size());
+		Assert.assertEquals(0, project.getTask(200).getIngoingConstraints().size());
+		Assert.assertEquals(3, project.getConstraints().size());
+	}
+
+	// TODO Add the other tests for the collapse scenario (when moving one side of
+	// the task
+	// also the other is updated)
 
 }

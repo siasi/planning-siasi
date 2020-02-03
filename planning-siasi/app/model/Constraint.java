@@ -26,7 +26,7 @@ public class Constraint {
 	public boolean isValid() {
 		LocalDate fromDate = from.getDate();
 		LocalDate toDate = to.getDate();
-		return fromDate.isBefore(toDate);
+		return fromDate.isBefore(toDate) || fromDate.isEqual(toDate);
 	}
 
 	public void setFromTask(Task t) {

@@ -1,0 +1,64 @@
+{
+   "id":10,
+   "name":"My Project",
+   "begin":"2020-06-12",
+   "end":"2020-06-20",
+   "tasks":[
+      {
+         "id":100,
+         "name":"First Big Task",
+         "begin":"2020-06-14",
+         "end":"2020-06-16",
+         "tasks":[]
+      },
+      {
+         "id":200,
+         "name":"Second Big Task",
+         "begin":"2020-06-17",
+         "end":"2020-06-20",
+         "tasks":[]
+      }
+   ],
+   "constraints":[
+      {
+         "from":{
+            "taskId":100,
+            "side":"BEGIN"
+         },
+         "to":{
+            "taskId":200,
+            "side":"BEGIN"
+         }
+      },
+      {
+         "from":{
+            "taskId":100,
+            "side":"BEGIN"
+         },
+         "to":{
+            "taskId":200,
+            "side":"END"
+         }
+      },
+      {
+         "from":{
+            "taskId":100,
+            "side":"END"
+         },
+         "to":{
+            "taskId":200,
+            "side":"BEGIN"
+         }
+      },
+      {
+         "from":{
+            "taskId":100,
+            "side":"END"
+         },
+         "to":{
+            "taskId":200,
+            "side":"END"
+         }
+      }
+   ]
+}
