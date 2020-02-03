@@ -12,7 +12,7 @@ public class Task {
 	private long id;
 	private String name;
 	private LocalDate begin, end;
-	private List<Task> tasks = new ArrayList<>();
+	private List<Task> tasks;
 
 	@JsonIgnore
 	private Task parent;
@@ -28,6 +28,11 @@ public class Task {
 			throw new IllegalArgumentException("Task cannot have null end date");
 		}
 
+		if (begin.isAfter(end)) {
+			throw new IllegalArgumentException(
+					"Task begin ( +" + begin + "+ ) should be BEFORE task end ( +" + end + "+ )");
+		}
+
 		if (name == null) {
 			name = "";
 		}
@@ -35,19 +40,15 @@ public class Task {
 		this.name = name;
 		this.begin = begin;
 		this.end = end;
+		this.tasks = new ArrayList<>();
 	}
 
 	@JsonCreator
 	public Task(@JsonProperty("id") long id, @JsonProperty("name") String name, @JsonProperty("begin") LocalDate begin,
 			@JsonProperty("end") LocalDate end, @JsonProperty("tasks") List<Task> tasks) {
-		super();
+		this(name, begin, end);
 		this.id = id;
-		this.name = name;
-		this.begin = begin;
-		this.end = end;
-		if (tasks == null) {
-			tasks = new ArrayList<>();
-		} else {
+		if (tasks != null) {
 			this.tasks = tasks;
 		}
 	}

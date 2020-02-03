@@ -63,10 +63,6 @@ public class Project extends Task {
 			taskIdToTask.put(currentTask.getId(), currentTask);
 		}
 
-		if (currentTask.endsBefore(currentTask.getBegin())) {
-			return false;
-		}
-
 		if (parent != null) {
 			if (currentTask.beginsBefore(parent.getBegin())) {
 				return false;

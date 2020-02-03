@@ -73,9 +73,4 @@ public class ConstraintTest {
 		}
 	}
 
-	// @Test
-	// public void constraintCannotBeBetweenSameTask() {
-	// Assert.fail("TBD");
-	// }
-
 }
