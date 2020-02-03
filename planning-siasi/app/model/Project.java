@@ -42,12 +42,20 @@ public class Project extends Task {
 			return false;
 		}
 
-		// Validate the constraints
+		// Validate the constraints and fill the ingoing/outgoing constraint lists in
+		// each task as side effect
 		return validateConstraints();
 	}
 
 	private boolean validateConstraints() {
 		for (Constraint c : constraints) {
+			Task from = taskIdToTask.get(c.getFrom().getTaskId());
+			Task to = taskIdToTask.get(c.getTo().getTaskId());
+			c.setFromTask(from);
+			from.addOutgoingConstraint(c);
+			c.setToTask(to);
+			to.addIngoingConstraint(c);
+
 			if (!c.isValid(taskIdToTask)) {
 				return false;
 			}
@@ -90,7 +98,7 @@ public class Project extends Task {
 		return getTask(taskId).updateBegin(newBegin);
 	}
 
-	private Task getTask(long taskId) {
+	Task getTask(long taskId) {
 		Task task;
 		if (taskId == getId()) {
 			task = this;

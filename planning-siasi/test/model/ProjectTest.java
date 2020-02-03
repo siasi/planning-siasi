@@ -237,4 +237,30 @@ public class ProjectTest {
 		Assert.assertEquals(LocalDate.parse("2020-06-14"), project.getTasks().get(0).getBegin());
 	}
 
+	@Test
+	public void shouldLoadConstraintsProperly() throws JsonParseException, JsonMappingException, IOException {
+		Project project = parse("test/resources/simpleProjectWithConstraints.json");
+		Assert.assertTrue(project.isValid());
+
+		// Assert the constraint 100/BEGIN -> 102/END is properly loaded
+		Constraint expected100_102 = new Constraint(new ConstraintSide(100, SideType.BEGIN),
+				new ConstraintSide(102, SideType.END));
+
+		Assert.assertEquals(1, project.getTask(100).getOutgoingConstraints().size());
+		Assert.assertEquals(expected100_102, project.getTask(100).getOutgoingConstraints().get(0));
+
+		Assert.assertEquals(1, project.getTask(102).getIngoingConstraints().size());
+		Assert.assertEquals(expected100_102, project.getTask(102).getIngoingConstraints().get(0));
+
+		// Assert the constraint 202/END -> 300/BEGIN is properly loaded
+		Constraint expected202_300 = new Constraint(new ConstraintSide(202, SideType.END),
+				new ConstraintSide(300, SideType.BEGIN));
+
+		Assert.assertEquals(1, project.getTask(202).getOutgoingConstraints().size());
+		Assert.assertEquals(expected202_300, project.getTask(202).getOutgoingConstraints().get(0));
+
+		Assert.assertEquals(1, project.getTask(300).getIngoingConstraints().size());
+		Assert.assertEquals(expected202_300, project.getTask(300).getIngoingConstraints().get(0));
+	}
+
 }

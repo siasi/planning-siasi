@@ -16,6 +16,8 @@ public class Task {
 
 	@JsonIgnore
 	private Task parent;
+	private List<Constraint> outgoingConstraints = new ArrayList<>();
+	private List<Constraint> ingoingConstraints = new ArrayList<>();
 
 	public Task(String name, LocalDate begin, LocalDate end) {
 		super();
@@ -184,6 +186,22 @@ public class Task {
 
 	public boolean endsAfter(Task other) {
 		return getEnd().isAfter(other.getEnd());
+	}
+
+	public void addIngoingConstraint(Constraint c) {
+		this.ingoingConstraints.add(c);
+	}
+
+	public void addOutgoingConstraint(Constraint c) {
+		this.outgoingConstraints.add(c);
+	}
+
+	List<Constraint> getOutgoingConstraints() {
+		return outgoingConstraints;
+	}
+
+	List<Constraint> getIngoingConstraints() {
+		return ingoingConstraints;
 	}
 
 	@Override
