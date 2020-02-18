@@ -25,6 +25,9 @@ import play.mvc.Result;
  */
 public class ProjectController extends Controller {
 
+	private HttpExecutionContext context;
+	private ProjectStore projectStore;
+
 	/**
 	 * An action that renders an HTML page with a welcome message. The configuration
 	 * in the <code>routes</code> file means that this method will be called when
@@ -34,9 +37,6 @@ public class ProjectController extends Controller {
 	public Result index() {
 		return ok(views.html.index.render());
 	}
-
-	private HttpExecutionContext context;
-	private ProjectStore projectStore;
 
 	@Inject
 	public ProjectController(HttpExecutionContext context, ProjectStore projectStore) {
@@ -93,6 +93,7 @@ public class ProjectController extends Controller {
 	}
 
 	public CompletionStage<Result> updateTaskBegin(long id, long taskId, String newDate) {
+		// TODO similar to the other method
 		return null;
 	}
 

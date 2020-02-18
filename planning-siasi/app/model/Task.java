@@ -106,6 +106,30 @@ public class Task {
 		return parent != null;
 	}
 
+	public void addIngoingConstraint(Constraint c) {
+		this.ingoingConstraints.add(c);
+	}
+
+	private void removeIngoingConstraint(Constraint c) {
+		this.ingoingConstraints.remove(c);
+	}
+
+	public void addOutgoingConstraint(Constraint c) {
+		this.outgoingConstraints.add(c);
+	}
+
+	private void removeOutgoingConstraint(Constraint c) {
+		this.outgoingConstraints.remove(c);
+	}
+
+	List<Constraint> getOutgoingConstraints() {
+		return outgoingConstraints;
+	}
+
+	List<Constraint> getIngoingConstraints() {
+		return ingoingConstraints;
+	}
+
 	public List<Constraint> updateEnd(LocalDate newEnd) {
 		List<Constraint> invalidConstraints = new ArrayList<>();
 		updateEnd(this, newEnd, invalidConstraints);
@@ -214,30 +238,6 @@ public class Task {
 
 	public boolean endsAfter(Task other) {
 		return getEnd().isAfter(other.getEnd());
-	}
-
-	public void addIngoingConstraint(Constraint c) {
-		this.ingoingConstraints.add(c);
-	}
-
-	private void removeIngoingConstraint(Constraint c) {
-		this.ingoingConstraints.remove(c);
-	}
-
-	public void addOutgoingConstraint(Constraint c) {
-		this.outgoingConstraints.add(c);
-	}
-
-	private void removeOutgoingConstraint(Constraint c) {
-		this.outgoingConstraints.remove(c);
-	}
-
-	List<Constraint> getOutgoingConstraints() {
-		return outgoingConstraints;
-	}
-
-	List<Constraint> getIngoingConstraints() {
-		return ingoingConstraints;
 	}
 
 	@Override
